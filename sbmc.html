@@ -594,8 +594,12 @@
         const el = document.getElementById(k);
         if (el) el.value = sample[k];
       });
-      saveState();
-      showToast('✓ 已載入繭裹子範例');
+      // 範例只是「臨時示範」，不寫入 localStorage
+      // 重整頁面就會回到空白；用戶若真的動手改任何一格，input 事件會觸發 saveState 開始儲存
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+      updateOrgName();
+      schedulePrompt();
+      showToast('✓ 已載入繭裹子範例（重整後會自動清空）');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
