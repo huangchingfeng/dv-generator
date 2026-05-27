@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>社會創新商業畫布 SBMC 生成器｜社會企業用 13 格畫布想清楚自己</title>
+  <meta name="description" content="社會創新商業畫布（Social Business Model Canvas, SBMC）一站式生成器。13 格即時編輯、自動視覺化、下載 PNG、AI 優化 Prompt。免費永久使用。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --cyan: #00D4FF;
+      --cyan-dark: #0099BB;
+      --cyan-10: rgba(0, 212, 255, 0.10);
+      --orange: #FF6B35;
+      --orange-10: rgba(255, 107, 53, 0.10);
+      --green-dark: #198F3F;
+      --green-10: rgba(52, 199, 89, 0.10);
+      --purple: #AF52DE;
+      --purple-10: rgba(175, 82, 222, 0.10);
+      --yellow: #FF9F0A;
+      --yellow-10: rgba(255, 159, 10, 0.10);
+      --white: #FFFFFF;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --card-2: #FAFAFA;
+      --border: #E5E5EA;
+      --border-strong: #D1D1D6;
+      --title: #1C1C1E;
+      --body: #2C2C2E;
+      --muted: #636366;
+      --secondary: #8E8E93;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan-dark); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1280px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Header */
+    header { padding: 28px 0 18px; background: var(--white); border-bottom: 1px solid var(--border); }
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .eyebrow {
+      display: inline-block;
+      color: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--cyan-10);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+    h1 { color: var(--title); font-size: 28px; line-height: 1.2; margin: 10px 0 6px; font-weight: 900; letter-spacing: -0.5px; }
+    .lead { max-width: 720px; font-size: 14.5px; color: var(--muted); margin: 0; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--title);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .back-link:hover { background: var(--cyan-10); border-color: var(--cyan); text-decoration: none; }
+
+    main { padding: 24px 0 60px; }
+
+    /* 暖身列 */
+    .warmup {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 2fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+    .warmup label { font-size: 12px; color: var(--muted); font-weight: 700; display: block; margin-bottom: 4px; }
+    .warmup input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14.5px;
+      color: var(--body);
+      background: var(--white);
+    }
+    .warmup input:focus { outline: none; border-color: var(--cyan-dark); box-shadow: 0 0 0 3px var(--cyan-10); }
+    .warmup .sample-btn {
+      padding: 9px 16px;
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .warmup .sample-btn:hover { background: #e85a23; }
+
+    /* SBMC Canvas */
+    .canvas-wrap {
+      background: var(--card);
+      border: 2px solid var(--title);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+    }
+    .canvas-title {
+      text-align: center;
+      padding: 10px 0 14px;
+      color: var(--title);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      border-bottom: 2px dashed var(--border);
+      margin-bottom: 12px;
+    }
+    .canvas-title .org-name { color: var(--cyan-dark); }
+    .canvas-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: auto auto auto;
+      gap: 8px;
+      min-height: 720px;
+    }
+    .cell {
+      background: var(--card-2);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 0;
+    }
+    .cell.new-cell { background: var(--orange-10); border-color: rgba(255, 107, 53, 0.4); }
+    .cell-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cell-head .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      background: var(--cyan-dark);
+      color: white;
+      border-radius: 4px;
+      font-weight: 900;
+      font-size: 10px;
+    }
+    .cell.new-cell .cell-head .num { background: var(--orange); }
+    .cell-head .icon { font-size: 14px; }
+    .cell-head .name {
+      color: var(--title);
+      font-weight: 800;
+      font-size: 12.5px;
+      line-height: 1.25;
+      flex: 1;
+    }
+    .cell-head .badge {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: var(--orange);
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .cell-hint {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .cell textarea {
+      flex: 1;
+      width: 100%;
+      min-height: 60px;
+      padding: 6px 8px;
+      border: 1px dashed var(--border-strong);
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--body);
+      background: var(--white);
+      resize: vertical;
+    }
+    .cell textarea:focus { outline: none; border-color: var(--cyan-dark); border-style: solid; box-shadow: 0 0 0 3px var(--cyan-10); }
+    .cell textarea::placeholder { color: var(--secondary); font-size: 11.5px; line-height: 1.45; }
+
+    /* Grid positions (5x3) */
+    .pos-kp   { grid-row: 1 / 3; grid-column: 1; }
+    .pos-ka   { grid-row: 1 / 2; grid-column: 2; }
+    .pos-kr   { grid-row: 2 / 3; grid-column: 2; }
+    .pos-svp  { grid-row: 1 / 2; grid-column: 3; }
+    .pos-cvp  { grid-row: 2 / 3; grid-column: 3; }
+    .pos-cr   { grid-row: 1 / 2; grid-column: 4; }
+    .pos-ch   { grid-row: 2 / 3; grid-column: 4; }
+    .pos-ben  { grid-row: 1 / 2; grid-column: 5; }
+    .pos-cs   { grid-row: 2 / 3; grid-column: 5; }
+    .pos-cost { grid-row: 3 / 4; grid-column: 1 / 3; }
+    .pos-rev  { grid-row: 3 / 4; grid-column: 3 / 5; }
+    .pos-imp  { grid-row: 3 / 4; grid-column: 5; }
+
+    /* Action bar */
+    .action-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      border: 1px solid var(--border-strong);
+      background: var(--white);
+      color: var(--title);
+      transition: all 0.15s;
+    }
+    .btn:hover { border-color: var(--cyan-dark); color: var(--cyan-dark); }
+    .btn.primary { background: var(--cyan-dark); color: white; border-color: var(--cyan-dark); }
+    .btn.primary:hover { background: #007a99; color: white; }
+    .btn.orange { background: var(--orange); color: white; border-color: var(--orange); }
+    .btn.orange:hover { background: #e85a23; color: white; }
+    .btn.ghost { background: transparent; border-color: transparent; color: var(--muted); }
+    .btn.ghost:hover { color: var(--red); border-color: transparent; }
+    .red { color: var(--red); }
+
+    /* Prompt 區塊 */
+    .prompt-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+    .prompt-section h3 { color: var(--title); font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .prompt-section .sub { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .prompt-box {
+      background: #1C1C1E;
+      color: #E5E5EA;
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+    .prompt-box::-webkit-scrollbar { width: 8px; }
+    .prompt-box::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+    /* Tips */
+    .tips {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 26px;
+      box-shadow: var(--shadow);
+    }
+    .tips h3 { color: var(--title); font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+    .tips ol { padding-left: 22px; }
+    .tips li { font-size: 14px; color: var(--body); margin: 6px 0; }
+    .tips strong { color: var(--cyan-dark); }
+    .tips .legend {
+      display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px;
+      padding: 12px; background: var(--card-2); border-radius: 8px;
+    }
+    .tips .legend span {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--muted); font-weight: 700;
+    }
+    .tips .legend .swatch {
+      display: inline-block; width: 14px; height: 14px; border-radius: 3px;
+    }
+    .tips .legend .sw-cyan { background: var(--card-2); border: 1.5px solid var(--border-strong); }
+    .tips .legend .sw-orange { background: var(--orange-10); border: 1.5px solid var(--orange); }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--title);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    footer { padding: 24px 0; color: var(--secondary); font-size: 13px; text-align: center; }
+
+    @media (max-width: 1100px) {
+      .canvas-grid { grid-template-columns: 1fr 1fr; }
+      .pos-kp, .pos-ka, .pos-kr, .pos-svp, .pos-cvp, .pos-cr, .pos-ch, .pos-ben, .pos-cs,
+      .pos-cost, .pos-rev, .pos-imp { grid-row: auto; grid-column: auto; }
+      .cell { min-height: 160px; }
+      .warmup { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      h1 { font-size: 22px; }
+      .canvas-grid { grid-template-columns: 1fr; }
+      .header-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <div class="header-row">
+        <div>
+          <span class="eyebrow">AUTOLAB · 社會創新商業畫布生成器</span>
+          <h1>SBMC｜13 格畫布把你的組織想清楚</h1>
+          <p class="lead">社會創新商業畫布（Social Business Model Canvas）線上工具。每格直接填、即時看畫布、下載 PNG 直接貼簡報。資料只存你瀏覽器，免註冊、免上傳、永久免費。</p>
+        </div>
+        <a class="back-link" href="index.html">← 回 DV 生成器</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- 暖身列 -->
+    <div class="warmup">
+      <div>
+        <label>組織名稱</label>
+        <input type="text" id="orgName" placeholder="例：繭裹子 Twine" />
+      </div>
+      <div>
+        <label>一句話介紹</label>
+        <input type="text" id="orgTagline" placeholder="例：台灣第一個 WFTO + B Corp 雙認證的公平貿易品牌" />
+      </div>
+      <button class="sample-btn" onclick="loadSample()">📥 載入繭裹子範例</button>
+    </div>
+
+    <!-- 畫布 -->
+    <div class="canvas-wrap" id="canvasWrap">
+      <div class="canvas-title">社會創新商業畫布 SBMC ｜ <span class="org-name" id="canvasOrgName">[你的組織名稱]</span></div>
+      <div class="canvas-grid" id="sbmcCanvas">
+
+        <!-- 第 1 欄：關鍵夥伴（跨兩列） -->
+        <div class="cell pos-kp">
+          <div class="cell-head"><span class="num">9</span><span class="icon">🤝</span><span class="name">關鍵夥伴 Key Partners</span></div>
+          <div class="cell-hint">💡 誰是你的供應商/合作組織？沒他們做不下去？</div>
+          <textarea id="kp" placeholder="例：尼泊爾 Mahaguthi、印度 Sasha、WFTO 國際組織、誠品、Pinkoi、各百貨通路"></textarea>
+        </div>
+
+        <!-- 第 2 欄：關鍵活動 + 關鍵資源 -->
+        <div class="cell pos-ka">
+          <div class="cell-head"><span class="num">7</span><span class="icon">⚡</span><span class="name">關鍵活動 Key Activities</span></div>
+          <div class="cell-hint">💡 你每天在做什麼？</div>
+          <textarea id="ka" placeholder="例：產品設計、海外工坊管理、品牌行銷、門市營運、B2B 業務、社群經營"></textarea>
+        </div>
+        <div class="cell pos-kr">
+          <div class="cell-head"><span class="num">8</span><span class="icon">📦</span><span class="name">關鍵資源 Key Resources</span></div>
+          <div class="cell-hint">💡 你有什麼資產（人/錢/技術/物/智財）？</div>
+          <textarea id="kr" placeholder="例：設計團隊 20+ 人、50+ 海外工坊、雙國際認證、16 年品牌、4 家門市"></textarea>
+        </div>
+
+        <!-- 第 3 欄：社會價值主張 + 客戶價值主張 -->
+        <div class="cell new-cell pos-svp">
+          <div class="cell-head"><span class="num">3</span><span class="icon">💗</span><span class="name">社會價值主張 Social Value</span><span class="badge">SBMC</span></div>
+          <div class="cell-hint">💡 對社會帶來什麼改變？哪些 SDGs？</div>
+          <textarea id="svp" placeholder="例：讓 25 國弱勢婦女取得公平貿易薪資、傳承傳統工藝；SDG 1/5/8/10/12/17"></textarea>
+        </div>
+        <div class="cell pos-cvp">
+          <div class="cell-head"><span class="num">4</span><span class="icon">💎</span><span class="name">客戶價值主張 Customer Value</span></div>
+          <div class="cell-hint">💡 付錢的人為什麼買單？</div>
+          <textarea id="cvp" placeholder="例：有設計感的永續生活產品 + 雙認證 + 可寫進企業永續報告書的故事"></textarea>
+        </div>
+
+        <!-- 第 4 欄：關係維護 + 通路 -->
+        <div class="cell pos-cr">
+          <div class="cell-head"><span class="num">6</span><span class="icon">💬</span><span class="name">關係維護 Relationships</span></div>
+          <div class="cell-hint">💡 怎麼跟受益者/客戶互動？</div>
+          <textarea id="cr" placeholder="例：客戶 — EDM / IG / 會員制；受益者 — 透過 NGO 每季回訪、年度走訪工坊"></textarea>
+        </div>
+        <div class="cell pos-ch">
+          <div class="cell-head"><span class="num">5</span><span class="icon">🚚</span><span class="name">通路 Channels</span></div>
+          <div class="cell-hint">💡 怎麼把產品/服務送到對方手上？</div>
+          <textarea id="ch" placeholder="例：4 家實體門市、官網 twine.tw、Pinkoi、誠品駐點、B2B 業務直接洽談"></textarea>
+        </div>
+
+        <!-- 第 5 欄：受益者 + 客戶區隔 -->
+        <div class="cell new-cell pos-ben">
+          <div class="cell-head"><span class="num">1</span><span class="icon">🫂</span><span class="name">受益者 Beneficiaries</span><span class="badge">SBMC</span></div>
+          <div class="cell-hint">💡 誰因你而受益？常常不付錢的那群</div>
+          <textarea id="ben" placeholder="例：尼泊爾、印度、孟加拉 25 國弱勢婦女工藝者（多為單親、無受教育機會），1000+ 人"></textarea>
+        </div>
+        <div class="cell pos-cs">
+          <div class="cell-head"><span class="num">2</span><span class="icon">🛍</span><span class="name">客戶區隔 Customer Segments</span></div>
+          <div class="cell-hint">💡 付錢的人是誰？</div>
+          <textarea id="cs" placeholder="例：25-45 歲關心永續的都會女性 + 上市櫃 ESG 採購窗口 + 誠品/Pinkoi 通路"></textarea>
+        </div>
+
+        <!-- 第 3 列：成本結構 + 收入來源 + 影響力衡量 -->
+        <div class="cell pos-cost">
+          <div class="cell-head"><span class="num">10</span><span class="icon">💸</span><span class="name">成本結構 Cost Structure</span></div>
+          <div class="cell-hint">💡 主要花在哪？固定 vs 變動？最大支出？</div>
+          <textarea id="cost" placeholder="例：商品採購 40%（公平貿易價）/ 人事 30% / 門市租金 15% / 行銷 10% / 認證費 5%"></textarea>
+        </div>
+        <div class="cell pos-rev">
+          <div class="cell-head"><span class="num">11</span><span class="icon">💰</span><span class="name">收入來源 Revenue Streams</span></div>
+          <div class="cell-hint">💡 錢從哪裡來？比例？分散度？</div>
+          <textarea id="rev" placeholder="例：B2C 零售 60% / B2B 企業團購 25% / 通路批發 15%；無單一客戶超過 10%"></textarea>
+        </div>
+        <div class="cell new-cell pos-imp">
+          <div class="cell-head"><span class="num">12</span><span class="icon">📈</span><span class="name">影響力衡量 Impact</span><span class="badge">SBMC</span></div>
+          <div class="cell-hint">💡 怎麼證明你做出社會成效？</div>
+          <textarea id="imp" placeholder="例：累計 1000+ 婦女、合作工坊收入 +60%、4 大認證、6 項 SDGs、10+ 上市企業合作"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 行動列 -->
+    <div class="action-bar">
+      <button class="btn primary" onclick="downloadPNG()">⬇ 下載畫布 PNG</button>
+      <button class="btn orange" onclick="generateAndCopyPrompt()">📋 複製 AI 優化 Prompt</button>
+      <button class="btn" onclick="openClaude()">🚀 開啟 Claude</button>
+      <button class="btn ghost" onclick="resetAll()"><span class="red">🗑 清空全部</span></button>
+    </div>
+
+    <!-- Prompt 預覽 -->
+    <div class="prompt-section">
+      <h3>🤖 給 AI 優化用的 Prompt</h3>
+      <div class="sub">把你填的 13 格內容打包成 prompt，貼到 Claude / Gemini / ChatGPT，AI 會幫你優化每格、補強邏輯、找出邏輯漏洞。</div>
+      <div class="prompt-box" id="promptBox">填完上面格子後，這裡會自動產生 prompt...</div>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips">
+      <h3>📖 使用教學</h3>
+      <ol>
+        <li><strong>從第 1 格「受益者」開始填</strong>——社創組織最該想清楚的是「誰會因為我受益」</li>
+        <li>順著編號 1→12 填，每格<strong>不要超過 50 字</strong>，重點是「能講出來」而不是「寫得完整」</li>
+        <li>不知道怎麼填？按右上「<strong>📥 載入繭裹子範例</strong>」看別人怎麼寫</li>
+        <li>填完按「<strong>⬇ 下載畫布 PNG</strong>」存圖，直接貼到簡報/Word/Email</li>
+        <li>不滿意？按「<strong>📋 複製 AI 優化 Prompt</strong>」→ 貼到 Claude，AI 會幫你重寫每格</li>
+        <li>所有資料自動存你<strong>瀏覽器 localStorage</strong>，下次回來繼續編</li>
+      </ol>
+      <div class="legend">
+        <span><span class="swatch sw-cyan"></span>原版 BMC 既有 9 格</span>
+        <span><span class="swatch sw-orange"></span>SBMC 新增 4 格（受益者 / 社會價值 / 影響力）</span>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Autolab · AI峰哥 · <a href="https://www.autolab.cloud" target="_blank">autolab.cloud</a> · 免費永久使用
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = 'sbmc_canvas_v1';
+    const FIELD_IDS = ['orgName', 'orgTagline', 'kp', 'ka', 'kr', 'svp', 'cvp', 'cr', 'ch', 'ben', 'cs', 'cost', 'rev', 'imp'];
+
+    // 13 格 metadata（給 prompt 用）
+    const CELL_META = [
+      { id: 'ben', label: '1. 受益者', tag: 'SBMC新增' },
+      { id: 'cs',  label: '2. 客戶區隔', tag: '' },
+      { id: 'svp', label: '3. 社會價值主張', tag: 'SBMC新增' },
+      { id: 'cvp', label: '4. 客戶價值主張', tag: '' },
+      { id: 'ch',  label: '5. 通路', tag: '' },
+      { id: 'cr',  label: '6. 關係維護', tag: '' },
+      { id: 'ka',  label: '7. 關鍵活動', tag: '' },
+      { id: 'kr',  label: '8. 關鍵資源', tag: '' },
+      { id: 'kp',  label: '9. 關鍵夥伴', tag: '' },
+      { id: 'cost',label: '10. 成本結構', tag: '' },
+      { id: 'rev', label: '11. 收入來源', tag: '' },
+      { id: 'imp', label: '12. 影響力衡量', tag: 'SBMC新增' },
+    ];
+
+    // ===== State =====
+    function saveState() {
+      const data = {};
+      FIELD_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.value;
+      });
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+      updateOrgName();
+      schedulePrompt();
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        FIELD_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && data[id] != null) el.value = data[id];
+        });
+      } catch(e) {}
+      updateOrgName();
+    }
+
+    function updateOrgName() {
+      const name = document.getElementById('orgName').value.trim() || '[你的組織名稱]';
+      document.getElementById('canvasOrgName').textContent = name;
+    }
+
+    function resetAll() {
+      if (!confirm('確定清空所有格子？此動作無法復原。')) return;
+      FIELD_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+      updateOrgName();
+      schedulePrompt();
+      showToast('已清空');
+    }
+
+    // ===== 載入繭裹子範例 =====
+    function loadSample() {
+      if (FIELD_IDS.some(id => document.getElementById(id).value.trim()) &&
+          !confirm('載入範例會覆蓋目前所有內容，確定要繼續嗎？')) return;
+      const sample = {
+        orgName: '繭裹子 Twine',
+        orgTagline: '台灣第一個 WFTO + B Corp 雙認證的公平貿易品牌',
+        ben: '尼泊爾、印度、孟加拉等 25 國弱勢婦女工藝者（多為單親、無受教育機會、無穩定收入），累計 1000+ 人',
+        cs: '① 25-45 歲關心永續的都會女性 ② 上市櫃 ESG/CSR 採購窗口 ③ 誠品/Pinkoi 通路客戶',
+        svp: '讓 25 國弱勢婦女取得公平貿易薪資、傳承即將失傳的傳統工藝；對應 SDG 1/5/8/10/12/17',
+        cvp: '有設計感的永續生活產品 + WFTO + B Corp 雙認證 + 可寫進企業永續報告書的故事感',
+        ch: '4 家實體門市（北/中）+ 官網 twine.tw + Pinkoi + 誠品駐點 + B2B 業務直接洽談',
+        cr: '客戶端：EDM / IG / 會員制；受益者端：透過合作 NGO 每季回訪、年度走訪工坊',
+        ka: '產品設計、海外工坊管理、品牌行銷、實體門市營運、企業 B2B 業務、社群經營',
+        kr: '20+ 人設計團隊、50+ 海外合作工坊網絡、雙國際認證、16 年品牌信譽、4 家門市租約',
+        kp: '尼泊爾 Mahaguthi、印度 Sasha、孟加拉多個 NGO、WFTO 國際組織、誠品通路、Pinkoi 平台',
+        cost: '商品採購 40%（公平貿易價）/ 人事 30% / 門市租金 15% / 行銷 10% / 認證費 5%',
+        rev: 'B2C 零售 60% / B2B 企業團購 25% / 通路批發 15%；無單一客戶超過 10%，分散度高',
+        imp: '累計支持 1000+ 婦女、合作工坊女性收入 +60%、4 大國際認證、6 項 SDGs 對應、10+ 上市企業合作',
+      };
+      Object.keys(sample).forEach(k => {
+        const el = document.getElementById(k);
+        if (el) el.value = sample[k];
+      });
+      saveState();
+      showToast('✓ 已載入繭裹子範例');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== Prompt 生成 =====
+    let promptTimer = null;
+    function schedulePrompt() {
+      clearTimeout(promptTimer);
+      promptTimer = setTimeout(generatePrompt, 300);
+    }
+
+    function generatePrompt() {
+      const org = document.getElementById('orgName').value.trim() || '[未填]';
+      const tagline = document.getElementById('orgTagline').value.trim() || '[未填]';
+      const filledCells = CELL_META.map(m => {
+        const v = (document.getElementById(m.id).value || '').trim();
+        return { ...m, value: v || '[未填]' };
+      });
+
+      const hasAny = filledCells.some(c => c.value !== '[未填]') || org !== '[未填]';
+      if (!hasAny) {
+        document.getElementById('promptBox').textContent = '填完上面格子後，這裡會自動產生 prompt...';
+        return;
+      }
+
+      const prompt = `# 角色 (Role)
+你是一位資深「社會企業策略顧問」，熟悉：
+- Alexander Osterwalder 的 Business Model Canvas
+- Social Innovation Lab 的 Social Business Model Canvas (SBMC)
+- 台灣勞動部《社會企業商業計畫指南》
+- SDGs 對應、企業 CSR/ESG 採購邏輯
+
+# 情境 (Context)
+我正在用 SBMC 13 格畫布盤點我的組織。下面是我目前填的版本，但我知道有些格子寫得不夠精準、或邏輯不夠連貫。請幫我看一遍、給優化建議。
+
+## 我的組織
+- 組織名稱：${org}
+- 一句話介紹：${tagline}
+
+## 我的 SBMC 目前版本
+
+${filledCells.map(c => `### ${c.label}${c.tag ? '（' + c.tag + '）' : ''}\n${c.value}`).join('\n\n')}
+
+# 期望 (Expectation)
+
+請依以下結構回覆：
+
+## Part 1：整體診斷（300 字內）
+- 我的 SBMC 整體合理嗎？
+- 商業模式可不可持續？
+- 社會價值與商業價值是否互相支援、還是互相打架？
+
+## Part 2：12 格逐格優化
+針對每一格，給：
+- 寫得好的地方（1 句）
+- 不足/可以更精準的地方（1-2 句具體建議）
+- 改寫範例（直接給我可貼回畫布的版本，50 字內）
+
+## Part 3：3 個關鍵發現
+- 找出我「沒寫但很重要」的 3 個盲點
+- 找出我「寫了但其實沒對應到」的邏輯漏洞
+- 找出 1 個我可以立即執行的下一步
+
+## Part 4：跟 DV 的銜接
+- 我的「12. 影響力衡量」格內容，已經足以做 DV（價值展示）了嗎？
+- 如果不夠，還缺哪些量化資料？
+
+## 寫作要求
+- 全程繁體中文台灣用語
+- 禁用詞：賦能、底層邏輯、顆粒度、視頻
+- 對「[未填]」的格子：直接列為「待補」並給 3 個引導問題協助我填，不要編造
+- 不要堆疊形容詞，用具體場景與數字
+`;
+
+      document.getElementById('promptBox').textContent = prompt;
+    }
+
+    function generateAndCopyPrompt() {
+      generatePrompt();
+      const text = document.getElementById('promptBox').textContent;
+      if (!text || text.startsWith('填完')) {
+        showToast('請先填一些格子'); return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Prompt 已複製，可以貼到 Claude 了');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ Prompt 已複製');
+      });
+    }
+
+    function openClaude() {
+      window.open('https://claude.ai/new', '_blank');
+    }
+
+    // ===== 下載 PNG =====
+    async function downloadPNG() {
+      const node = document.getElementById('canvasWrap');
+      try {
+        showToast('產生圖片中...');
+        const canvas = await html2canvas(node, {
+          backgroundColor: '#FFFFFF',
+          scale: 2,
+          useCORS: true,
+          logging: false,
+        });
+        canvas.toBlob((blob) => {
+          if (!blob) { showToast('PNG 產生失敗'); return; }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          const orgName = document.getElementById('orgName').value.trim().replace(/[^\w一-龥]/g, '_') || 'SBMC';
+          a.href = url;
+          a.download = `${orgName}-SBMC-${new Date().toISOString().slice(0,10)}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('✓ PNG 已下載（2x 高解析）');
+        }, 'image/png');
+      } catch (e) {
+        showToast('下載失敗：' + (e && e.message ? e.message : e));
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // ===== Init =====
+    FIELD_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', saveState);
+      }
+    });
+    loadState();
+    schedulePrompt();
+  </script>
+
+</body>
+</html>

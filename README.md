@@ -1,10 +1,11 @@
-# DV 價值展示工具組
+# 社會創新工具組
 
-社會企業價值展示（Demonstrating Value）一站式工具包。
+社會企業 / 社創組織一站式 AI 工具包。
 
 **🌐 線上使用**：
-- **[DV 生成器](https://huangchingfeng.github.io/dv-generator/)** — 填表單產出 AI 提示詞
-- **[Mermaid 圖表生成器](https://huangchingfeng.github.io/dv-generator/mermaid.html)** — 貼上 AI 給的代碼變圖表（圓餅/流程/心智/甘特/長條/矩陣圖）
+- **[DV 價值展示生成器](https://huangchingfeng.github.io/dv-generator/)** — 12 引導問題填表單產 AI Prompt（內部對齊→對外溝通）
+- **[SBMC 商業畫布生成器](https://huangchingfeng.github.io/dv-generator/sbmc.html)** — 13 格畫布即時編輯，下載 PNG / AI 優化 Prompt
+- **[Mermaid 圖表生成器](https://huangchingfeng.github.io/dv-generator/mermaid.html)** — 貼 AI 代碼變圖（圓餅/流程/心智/甘特/長條/矩陣圖）
 - **[Claude 跑出來的成果範例](https://docs.google.com/document/d/16hDd_0eoMWWbnqtxps_ytrSW8bTXaSkpOqSFJNhMjMk/edit?usp=sharing)** — 繭裹子完整 DV 草稿示範（Google Docs）
 
 填表單 → 自動產生 Claude / Gemini 完整提示詞 → 貼到 AI 一鍵生成你的 DV 草稿 → AI 給的 Mermaid 代碼貼到圖表生成器直接出圖。
