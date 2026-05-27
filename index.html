@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DV 價值展示生成器｜社會企業用 AI 說自己的故事</title>
-  <meta name="description" content="社會企業價值展示（Demonstrating Value）一鍵 prompt 產生器。填表單 → 產出 Gemini/ChatGPT 完整提示詞 → 貼到 AI 出 DV 草稿。免費永久使用。">
+  <meta name="description" content="社會企業價值展示（Demonstrating Value）一鍵 prompt 產生器。填表單 → 產出 Claude / Gemini 完整提示詞 → 貼到 AI 出 DV 草稿。免費永久使用。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -337,7 +337,7 @@
     <div class="wrap">
       <span class="eyebrow">AUTOLAB · 社會企業價值展示工具</span>
       <h1>DV 價值展示生成器</h1>
-      <p class="lead">填表單 → 自動產生完整 Gemini / ChatGPT 提示詞 → 貼到 AI 一鍵生成你的 DV 草稿。資料只存你瀏覽器，免註冊免上傳，永久免費。</p>
+      <p class="lead">填表單 → 自動產生完整 Claude / Gemini 提示詞 → 貼到 AI 一鍵生成你的 DV 草稿。資料只存你瀏覽器，免註冊免上傳，永久免費。</p>
     </div>
   </header>
 
@@ -367,7 +367,7 @@
       <div class="callout callout-blue">
         <strong>💡 第一次使用？</strong>先看示範案例就懂怎麼填了 →
         <button class="btn btn-orange" style="margin-left:8px;padding:6px 14px;font-size:13px;" onclick="loadExample('cocoon')">📥 載入示範：繭裹子公平貿易</button>
-        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="example-cocoon.html" target="_blank">📄 看 Gemini 跑出來的成果</a>
+        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="example-cocoon.html" target="_blank">📄 看 Claude 跑出來的成果</a>
       </div>
 
       <div class="panel">
@@ -654,14 +654,14 @@
       <div class="step-header">
         <span class="step-eyebrow">Step 5 / 5</span>
         <h2 class="step-title">你的 DV 生成 Prompt</h2>
-        <p class="step-desc">下面這段提示詞是依你的資料量身組合，採「角色 × 情境 × 期望」結構。一鍵複製後貼到 Gemini / ChatGPT 即可。</p>
+        <p class="step-desc">下面這段提示詞是依你的資料量身組合，採「角色 × 情境 × 期望」結構。一鍵複製後貼到 Claude / Gemini 即可。</p>
       </div>
 
       <div class="callout callout-green">
         <strong>💡 推薦工具：</strong>
+        <a href="https://claude.ai/" target="_blank">Claude</a>（⭐ 推薦、長提示詞理解最好）｜
         <a href="https://gemini.google.com/" target="_blank">Gemini</a>（免費、台灣可用）｜
-        <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>（免費）｜
-        <a href="https://claude.ai/" target="_blank">Claude</a>（免費）。提示詞太長時建議用 <strong>Gemini Pro / Claude</strong>。
+        <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>（免費）。這份 prompt 較長，<strong>用 Claude 效果最佳</strong>。
       </div>
 
       <div class="panel">
@@ -669,7 +669,7 @@
         <div class="output-box" id="promptOutput">填完前面步驟後，這裡會自動產生你的 prompt...</div>
         <div class="action-row">
           <button class="btn btn-primary" onclick="copyPrompt()">📋 複製 Prompt</button>
-          <button class="btn btn-orange" onclick="openGemini()">🚀 開啟 Gemini</button>
+          <button class="btn btn-orange" onclick="openClaude()">🚀 開啟 Claude</button>
           <button class="btn btn-secondary" onclick="downloadPrompt()">💾 下載 .txt</button>
           <button class="btn btn-ghost" onclick="goStep(4)">← 回去調整</button>
         </div>
@@ -679,7 +679,7 @@
         <h3 style="color:var(--title);font-size:16px;font-weight:800;margin-bottom:10px;">📖 使用步驟</h3>
         <ol style="padding-left:20px;color:var(--body);font-size:14.5px;line-height:1.9;">
           <li>點「📋 複製 Prompt」</li>
-          <li>點「🚀 開啟 Gemini」（或 ChatGPT / Claude）</li>
+          <li>點「🚀 開啟 Claude」（或 Gemini / ChatGPT）</li>
           <li>貼上 prompt，按 Enter</li>
           <li>AI 會產出你的 DV 草稿（含一頁式摘要、詳細版、口頭版、視覺化建議、行動清單）</li>
           <li>把草稿放進 Canva / FELO / Gamma 美化成最終簡報</li>
@@ -939,8 +939,8 @@ ${d.G}
       });
     }
 
-    function openGemini() {
-      window.open('https://gemini.google.com/app', '_blank');
+    function openClaude() {
+      window.open('https://claude.ai/new', '_blank');
     }
 
     function downloadPrompt() {

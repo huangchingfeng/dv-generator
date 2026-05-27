@@ -2,7 +2,7 @@
 
 社會企業價值展示（Demonstrating Value）一鍵 prompt 產生器。
 
-填表單 → 自動產生 Gemini / ChatGPT / Claude 完整提示詞 → 貼到 AI 一鍵生成你的 DV 草稿。
+填表單 → 自動產生 Claude / Gemini 完整提示詞 → 貼到 AI 一鍵生成你的 DV 草稿。
 
 **🌐 線上使用**：https://huangchingfeng.github.io/dv-generator/
 
