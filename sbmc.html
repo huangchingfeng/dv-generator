@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>社會創新商業畫布 SBMC 生成器｜社會企業用 13 格畫布想清楚自己</title>
-  <meta name="description" content="社會創新商業畫布（Social Business Model Canvas, SBMC）一站式生成器。13 格即時編輯、自動視覺化、下載 PNG、AI 優化 Prompt。免費永久使用。">
+  <meta name="description" content="社會創新商業畫布（Social Business Model Canvas, SBMC）一站式生成器。13 格即時編輯、下載 PNG、Excel、貼到 Claude/Gemini Canvas 一鍵畫出漂亮畫布。免費永久使用。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -463,15 +463,23 @@
     <div class="action-bar">
       <button class="btn primary" onclick="downloadPNG()">⬇ 下載畫布 PNG</button>
       <button class="btn primary" onclick="downloadExcel()">📊 下載 Excel</button>
-      <button class="btn orange" onclick="generateAndCopyPrompt()">📋 複製 AI 優化 Prompt</button>
+      <button class="btn orange" onclick="generateAndCopyPrompt()">📋 複製給 AI 畫畫布</button>
       <button class="btn" onclick="openClaude()">🚀 開啟 Claude</button>
       <button class="btn ghost" onclick="resetAll()"><span class="red">🗑 清空全部</span></button>
     </div>
 
     <!-- Prompt 預覽 -->
     <div class="prompt-section">
-      <h3>🤖 給 AI 優化用的 Prompt</h3>
-      <div class="sub">把你填的 13 格內容打包成 prompt，貼到 Claude / Gemini / ChatGPT，AI 會幫你優化每格、補強邏輯、找出邏輯漏洞。</div>
+      <h3>🎨 給 AI 畫畫布的 Prompt</h3>
+      <div class="sub">
+        把你填的 13 格打包成簡短 prompt，貼到下面任一工具，AI 會自動畫出一張漂亮的視覺畫布。
+        <br>
+        💡 <strong>最佳搭配</strong>：
+        <a href="https://claude.ai/new" target="_blank">Claude（Artifacts）</a> ｜
+        <a href="https://gemini.google.com/" target="_blank">Gemini（Canvas）</a> ｜
+        <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>
+        — 這三個工具都可以「邊聊邊改」，你看畫布不滿意可以接著說「橘色再深一點」「字再大」AI 會即時改。
+      </div>
       <div class="prompt-box" id="promptBox">填完上面格子後，這裡會自動產生 prompt...</div>
     </div>
 
@@ -483,7 +491,7 @@
         <li>順著編號 1→12 填，每格<strong>不要超過 50 字</strong>，重點是「能講出來」而不是「寫得完整」</li>
         <li>不知道怎麼填？按右上「<strong>📥 載入繭裹子範例</strong>」看別人怎麼寫</li>
         <li>填完按「<strong>⬇ 下載畫布 PNG</strong>」存圖，直接貼到簡報/Word/Email</li>
-        <li>不滿意？按「<strong>📋 複製 AI 優化 Prompt</strong>」→ 貼到 Claude，AI 會幫你重寫每格</li>
+        <li>想要漂亮版？按「<strong>📋 複製給 AI 畫畫布</strong>」→ 貼到 Claude Artifacts / Gemini Canvas / ChatGPT → AI 直接畫出視覺版（可下載/截圖）</li>
         <li>所有資料自動存你<strong>瀏覽器 localStorage</strong>，下次回來繼續編</li>
       </ol>
       <div class="legend">
@@ -600,66 +608,37 @@
 
     function generatePrompt() {
       const org = document.getElementById('orgName').value.trim() || '[未填]';
-      const tagline = document.getElementById('orgTagline').value.trim() || '[未填]';
+      const tagline = document.getElementById('orgTagline').value.trim() || '';
       const filledCells = CELL_META.map(m => {
         const v = (document.getElementById(m.id).value || '').trim();
-        return { ...m, value: v || '[未填]' };
+        return { ...m, value: v || '（待填）' };
       });
 
-      const hasAny = filledCells.some(c => c.value !== '[未填]') || org !== '[未填]';
+      const hasAny = filledCells.some(c => c.value !== '（待填）') || org !== '[未填]';
       if (!hasAny) {
         document.getElementById('promptBox').textContent = '填完上面格子後，這裡會自動產生 prompt...';
         return;
       }
 
-      const prompt = `# 角色 (Role)
-你是一位資深「社會企業策略顧問」，熟悉：
-- Alexander Osterwalder 的 Business Model Canvas
-- Social Innovation Lab 的 Social Business Model Canvas (SBMC)
-- 台灣勞動部《社會企業商業計畫指南》
-- SDGs 對應、企業 CSR/ESG 採購邏輯
+      const prompt = `這是我的【社會創新商業畫布 SBMC】13 格內容，請幫我做成一張漂亮的視覺畫布（HTML 單檔 / 圖片皆可）。
 
-# 情境 (Context)
-我正在用 SBMC 13 格畫布盤點我的組織。下面是我目前填的版本，但我知道有些格子寫得不夠精準、或邏輯不夠連貫。請幫我看一遍、給優化建議。
+# 我的組織
+- 名稱：${org}
+- 一句話介紹：${tagline || '（無）'}
 
-## 我的組織
-- 組織名稱：${org}
-- 一句話介紹：${tagline}
+# 13 格內容
+${filledCells.map(c => `${c.label}${c.tag ? ' ⭐' + c.tag : ''}：${c.value}`).join('\n')}
 
-## 我的 SBMC 目前版本
+# 設計要求
+1. 按標準 Business Model Canvas 5x3 排版（左到右、上到下符合 BMC 慣例）
+2. 標示 ⭐SBMC 新增 的 3 格（受益者、社會價值主張、影響力衡量）用橘色強調（背景或邊框），其他 9 格用淡灰
+3. 字型用 Noto Sans TC / Inter 系統字
+4. 加組織名稱當主標題
+5. 響應式設計（手機 stack 直排）
+6. 適合直接列印 A3 / 截圖貼簡報
+7. 若產出 HTML，請用 Claude Artifacts / Gemini Canvas 可直接渲染的單檔版本
 
-${filledCells.map(c => `### ${c.label}${c.tag ? '（' + c.tag + '）' : ''}\n${c.value}`).join('\n\n')}
-
-# 期望 (Expectation)
-
-請依以下結構回覆：
-
-## Part 1：整體診斷（300 字內）
-- 我的 SBMC 整體合理嗎？
-- 商業模式可不可持續？
-- 社會價值與商業價值是否互相支援、還是互相打架？
-
-## Part 2：12 格逐格優化
-針對每一格，給：
-- 寫得好的地方（1 句）
-- 不足/可以更精準的地方（1-2 句具體建議）
-- 改寫範例（直接給我可貼回畫布的版本，50 字內）
-
-## Part 3：3 個關鍵發現
-- 找出我「沒寫但很重要」的 3 個盲點
-- 找出我「寫了但其實沒對應到」的邏輯漏洞
-- 找出 1 個我可以立即執行的下一步
-
-## Part 4：跟 DV 的銜接
-- 我的「12. 影響力衡量」格內容，已經足以做 DV（價值展示）了嗎？
-- 如果不夠，還缺哪些量化資料？
-
-## 寫作要求
-- 全程繁體中文台灣用語
-- 禁用詞：賦能、底層邏輯、顆粒度、視頻
-- 對「[未填]」的格子：直接列為「待補」並給 3 個引導問題協助我填，不要編造
-- 不要堆疊形容詞，用具體場景與數字
-`;
+請開始。`;
 
       document.getElementById('promptBox').textContent = prompt;
     }
