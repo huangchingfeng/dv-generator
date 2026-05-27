@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --cyan: #00D4FF;
@@ -461,6 +462,7 @@
     <!-- 行動列 -->
     <div class="action-bar">
       <button class="btn primary" onclick="downloadPNG()">⬇ 下載畫布 PNG</button>
+      <button class="btn primary" onclick="downloadExcel()">📊 下載 Excel</button>
       <button class="btn orange" onclick="generateAndCopyPrompt()">📋 複製 AI 優化 Prompt</button>
       <button class="btn" onclick="openClaude()">🚀 開啟 Claude</button>
       <button class="btn ghost" onclick="resetAll()"><span class="red">🗑 清空全部</span></button>
@@ -683,6 +685,130 @@ ${filledCells.map(c => `### ${c.label}${c.tag ? '（' + c.tag + '）' : ''}\n${c
 
     function openClaude() {
       window.open('https://claude.ai/new', '_blank');
+    }
+
+    // ===== 下載 Excel（雙工作表：畫布版 + 清單版）=====
+    function downloadExcel() {
+      if (typeof XLSX === 'undefined') {
+        showToast('Excel 函式庫尚未載入，請稍候再試');
+        return;
+      }
+      const org = document.getElementById('orgName').value.trim() || '[未填組織名稱]';
+      const tagline = document.getElementById('orgTagline').value.trim() || '';
+      const val = (id) => (document.getElementById(id).value || '').trim();
+
+      // ---- Sheet 1: 畫布版（模擬 5x3 視覺）----
+      const TITLE_ROW = [`社會創新商業畫布 SBMC｜${org}`, '', '', '', ''];
+      const TAGLINE_ROW = [tagline, '', '', '', ''];
+      const BLANK = ['', '', '', '', ''];
+
+      // 第 1 列：4 個格標題 + 受益者（受益者只 1 列高）
+      // 為了讓「關鍵夥伴」跨兩列，我們在 row3/row4 都放它的內容
+      const canvasData = [
+        TITLE_ROW,
+        TAGLINE_ROW,
+        BLANK,
+        ['【9】關鍵夥伴 Key Partners', '【7】關鍵活動 Key Activities', '【3】社會價值主張 Social Value Proposition ⭐SBMC新增', '【6】關係維護 Customer Relationships', '【1】受益者 Beneficiaries ⭐SBMC新增'],
+        [val('kp'), val('ka'), val('svp'), val('cr'), val('ben')],
+        ['', '【8】關鍵資源 Key Resources', '【4】客戶價值主張 Customer Value Proposition', '【5】通路 Channels', '【2】客戶區隔 Customer Segments'],
+        [val('kp'), val('kr'), val('cvp'), val('ch'), val('cs')],
+        BLANK,
+        ['【10】成本結構 Cost Structure', '', '【11】收入來源 Revenue Streams', '', '【12】影響力衡量 Impact Measures ⭐SBMC新增'],
+        [val('cost'), '', val('rev'), '', val('imp')],
+      ];
+
+      const ws1 = XLSX.utils.aoa_to_sheet(canvasData);
+
+      // 合併 cells
+      ws1['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: 4 } },  // 標題列合併
+        { s: { r: 1, c: 0 }, e: { r: 1, c: 4 } },  // 副標列合併
+        // 關鍵夥伴跨兩列
+        { s: { r: 3, c: 0 }, e: { r: 5, c: 0 } },  // 標題 + 內容跨 3 行（標題行+內容+下一段標題行）
+        { s: { r: 6, c: 0 }, e: { r: 6, c: 0 } },  // 內容
+        // 成本結構合併（A8:B8 跟 A9:B9）
+        { s: { r: 8, c: 0 }, e: { r: 8, c: 1 } },  // 成本標題
+        { s: { r: 9, c: 0 }, e: { r: 9, c: 1 } },  // 成本內容
+        { s: { r: 8, c: 2 }, e: { r: 8, c: 3 } },  // 收入標題
+        { s: { r: 9, c: 2 }, e: { r: 9, c: 3 } },  // 收入內容
+      ];
+
+      // 欄寬
+      ws1['!cols'] = [
+        { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 30 },
+      ];
+
+      // 列高（讓內容看得到）
+      ws1['!rows'] = [
+        { hpt: 24 }, // 標題
+        { hpt: 20 }, // 副標
+        { hpt: 8 },  // 空
+        { hpt: 32 }, // 第 1 列標題
+        { hpt: 120 },// 第 1 列內容
+        { hpt: 32 }, // 第 2 列標題
+        { hpt: 120 },// 第 2 列內容
+        { hpt: 8 },  // 空
+        { hpt: 32 }, // 第 3 列標題
+        { hpt: 120 },// 第 3 列內容
+      ];
+
+      // wrap text（每個 cell 加上 alignment）
+      const range = XLSX.utils.decode_range(ws1['!ref']);
+      for (let R = range.s.r; R <= range.e.r; ++R) {
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          const addr = XLSX.utils.encode_cell({ r: R, c: C });
+          if (!ws1[addr]) continue;
+          ws1[addr].s = ws1[addr].s || {};
+          ws1[addr].s.alignment = { wrapText: true, vertical: 'top', horizontal: 'left' };
+        }
+      }
+
+      // ---- Sheet 2: 清單版（方便編輯）----
+      const listData = [
+        [`社會創新商業畫布 SBMC｜${org}`],
+        [tagline],
+        [],
+        ['格號', '中文名稱', '英文名稱', '類型', '內容', '引導問題'],
+        [1, '受益者', 'Beneficiaries', 'SBMC 新增', val('ben'), '誰因你而受益？常常不付錢的那群'],
+        [2, '客戶區隔', 'Customer Segments', '原版 BMC', val('cs'), '付錢的人是誰？特徵是什麼？'],
+        [3, '社會價值主張', 'Social Value Proposition', 'SBMC 新增', val('svp'), '對社會帶來什麼改變？哪些 SDGs？'],
+        [4, '客戶價值主張', 'Customer Value Proposition', '原版 BMC', val('cvp'), '付錢的人為什麼買單？'],
+        [5, '通路', 'Channels', '原版 BMC', val('ch'), '怎麼把產品/服務送到對方手上？'],
+        [6, '關係維護', 'Customer Relationships', '原版 BMC', val('cr'), '怎麼跟受益者/客戶互動？'],
+        [7, '關鍵活動', 'Key Activities', '原版 BMC', val('ka'), '你每天在做什麼？'],
+        [8, '關鍵資源', 'Key Resources', '原版 BMC', val('kr'), '你有什麼資產（人/錢/技術/物/智財）？'],
+        [9, '關鍵夥伴', 'Key Partners', '原版 BMC', val('kp'), '誰是你的供應商/合作組織？'],
+        [10, '成本結構', 'Cost Structure', '原版 BMC', val('cost'), '主要花在哪？固定 vs 變動？'],
+        [11, '收入來源', 'Revenue Streams', '原版 BMC', val('rev'), '錢從哪裡來？比例？分散度？'],
+        [12, '影響力衡量', 'Impact Measures', 'SBMC 新增', val('imp'), '怎麼證明你做出社會成效？'],
+      ];
+
+      const ws2 = XLSX.utils.aoa_to_sheet(listData);
+      ws2['!cols'] = [
+        { wch: 6 }, { wch: 16 }, { wch: 28 }, { wch: 12 }, { wch: 50 }, { wch: 40 },
+      ];
+
+      // 清單版 wrap text
+      const r2 = XLSX.utils.decode_range(ws2['!ref']);
+      for (let R = r2.s.r; R <= r2.e.r; ++R) {
+        for (let C = r2.s.c; C <= r2.e.c; ++C) {
+          const addr = XLSX.utils.encode_cell({ r: R, c: C });
+          if (!ws2[addr]) continue;
+          ws2[addr].s = ws2[addr].s || {};
+          ws2[addr].s.alignment = { wrapText: true, vertical: 'top', horizontal: 'left' };
+        }
+      }
+
+      // ---- 組合 workbook ----
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws1, '畫布版');
+      XLSX.utils.book_append_sheet(wb, ws2, '清單版（方便編輯）');
+
+      // 下載
+      const safeName = (org.replace(/[^\w一-龥]/g, '_') || 'SBMC');
+      const fname = `${safeName}-SBMC-${new Date().toISOString().slice(0,10)}.xlsx`;
+      XLSX.writeFile(wb, fname);
+      showToast('✓ Excel 已下載（2 個工作表：畫布版 + 清單版）');
     }
 
     // ===== 下載 PNG =====
