@@ -364,6 +364,12 @@
         <p class="step-desc">先想清楚對象，才能決定語氣、內容深度與呈現方式。可複選，但建議聚焦 1-2 個主要受眾。</p>
       </div>
 
+      <div class="callout callout-blue">
+        <strong>💡 第一次使用？</strong>先看示範案例就懂怎麼填了 →
+        <button class="btn btn-orange" style="margin-left:8px;padding:6px 14px;font-size:13px;" onclick="loadExample('cocoon')">📥 載入示範：繭裹子公平貿易</button>
+        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="example-cocoon.html" target="_blank">📄 看 Gemini 跑出來的成果</a>
+      </div>
+
       <div class="panel">
         <div class="field">
           <label class="field-label">主要受眾<span class="req">*</span></label>
@@ -954,6 +960,63 @@ ${d.G}
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // ===== Example: 繭裹子 =====
+    const COCOON_EXAMPLE = {
+      audience: ['企業 CSR/ESG 採購窗口', '媒體與公眾'],
+      audienceOther: '鎖定上市櫃公司永續部副理級、年資 3-7 年的窗口；兼顧獨立媒體 ESG 線記者',
+      audienceCare: '企業 CSR 副理在乎：① 採購故事能否寫進公司永續報告書 ② SDGs 對應是否具體 ③ 商品品質與交期穩定 ④ WFTO/B Corp 認證文件能否快速取得 ⑤ 員工拿到禮品後的「故事感」能否傳達',
+      audienceFormat: '完整 PDF（10-20 頁）',
+      purpose: ['取得企業合作', '增加品牌見度'],
+      purposeAction: '希望企業 ESG 窗口主動聯繫繭裹子業務團隊，啟動「年度員工禮品/客戶贈品」採購評估，目標 6 個月內完成首批採購（30 萬以上）。',
+      successMetric: '3 個月內收到 5 家上市櫃公司合作意向、其中 2 家進入採購流程、1 家完成首批 50 萬元採購並寫進當年永續報告書',
+      questions: {
+        q1: '主要對象：上市櫃公司永續部副理（年資 3-7 年、30-40 歲）；常需在 1 個月內完成「值得寫進永續報告書」的採購；過去多採購印刷品、咖啡、有機米當禮品，今年被總經理要求「升級到有國際認證的社企商品」。',
+        q2: '希望對方願意把繭裹子納入「年度員工生日禮 / 客戶答謝禮 / 公司年禮」採購名單；首批起訂量 100-300 個（NT$30-50 萬）；長期目標成為該公司「永續禮品供應商」之一。',
+        q3: '繭裹子是台灣第一個取得 WFTO + B Corp 雙認證的公平貿易品牌，2010 年至今連結 25 個國家、50+ 生產組織，把您的禮品預算直接轉成第三世界婦女的穩定收入。',
+        q4: '① 2010 立案至今 16 年，台灣第一個 WFTO 認證品牌\n② 連結 25 國、50+ 生產組織，背後是 1000+ 弱勢婦女工藝者\n③ B Corp 認證、1% for the Planet 會員、Fairtrade Cotton 認證\n④ 全台 4 家實體門市 + 官網 + Pinkoi\n⑤ 10+ 家上市企業合作經驗（含金融、科技、零售業）',
+        q5: '故事 1：尼泊爾 Mahaguthi 工坊的 Sita（化名，48 歲），原本在加德滿都郊區做日薪工人，加入工坊 8 年後每月穩定收入 1.2 萬盧比（約 NT$2,800），讓兩個女兒讀完高中。\n故事 2：印度 Rajasthan 的針織小組（25 人），透過繭裹子的長期下單，從季節性收入轉為「年訂單量穩定」的合作關係，工坊女性平均月收入提升 60%。\n故事 3：某上市金融業 ESG 副理：「我們把繭裹子寫進去年永續報告書，金管會評鑑得到 A++ 永續評等，董事長親自提及這個案例。」',
+        q6: '同類品牌（光原社企、芙彤園、卓溪鄉合作社）大多聚焦「台灣本地原民」；繭裹子的獨特性：\n① 國際層級：跨 25 國公平貿易網絡，能對應跨國企業客戶\n② 雙認證背書（WFTO + B Corp），文件可直接附在採購單\n③ 設計力強，能對應「品牌升級需求」的企業\n④ 16 年穩定營運，供應鏈成熟，能接 100-1000 個的中大量訂單',
+        q7: '年營收：5000 萬-1 億區間（估）；公平貿易採購占比 100%\n收入結構：B2C 零售 60% / B2B 企業團購 25% / 通路批發 15%\n編制：台灣團隊約 20-30 人（設計、業務、品牌、門市）+ 海外 50+ 生產組織',
+        q8: '認證：WFTO 世界公平貿易組織（2010 起，台灣第一）、B Corp 認證、1% for the Planet 會員、Fairtrade Cotton\n媒體：社企流多次專題、商業周刊、天下永續報導\n通路：誠品、Pinkoi、各百貨設櫃\n入選：經濟部社會創新平台登錄廠商、Buying Power 採購名單',
+        q9: 'SDG 1 消除貧窮（弱勢婦女穩定收入）\nSDG 5 性別平等（女性工藝者經濟自立）\nSDG 8 適當工作與經濟成長（公平貿易薪資與工作條件）\nSDG 10 減少不平等（連結開發中國家生產者）\nSDG 12 負責任的消費與生產（永續供應鏈）\nSDG 17 多方夥伴關係（25 國 50+ NGO 網絡）',
+        q10: '2026-2028 三年計畫：\n① B2B 企業團購從 25% 拉到 40%\n② 開發「企業 ESG 客製專案」服務（含商品 + 員工故事溝通 + 報告書素材包）\n③ 與更多東南亞、非洲生產者合作（從 25 國拓展到 30 國）\n④ 推出「公平貿易教育」課程給企業內訓使用',
+        q11: '請掃描下方 QR Code 預約 30 分鐘線上提案會議，我們將依貴公司需求量、預算、永續策略，提供客製化禮品方案。或撥打企業合作專線：02-xxxx-xxxx 找 Liz 共同創辦人。',
+        q12: '「合作網絡圖」用心智圖（25 國 + 50 組織）\n「年度成長」用甘特圖（從 2010 到現在的里程碑）\n「收入結構」用圓餅圖（B2C/B2B/通路占比）\n「SDGs 對應」用視覺化對應表\n「企業客戶禮品案例」用 before/after 對比圖',
+      },
+      data: {
+        dataA: '組織名稱：繭裹子 Twine\n成立年份：2010\n創辦人：Vinka & Liz\n使命：「希望不再為世界帶來破壞」——透過台灣設計 × 公平貿易 × 國際工藝傳承，讓買賣關係成為改變世界的力量\n服務範圍：全球 25 國 50+ 生產組織；台灣端設計、品牌、銷售\n編制：台灣團隊 20-30 人 + 海外 50+ 合作工坊',
+        dataB: '累計支持 1000+ 名第三世界弱勢婦女\n合作工坊女性平均收入提升 60%（部分工坊數據）\n年營收：5000 萬-1 億區間；公平貿易採購占比 100%\n媒體曝光：社企流、商周、天下、CSRone 多次深度報導；FB 12 萬粉絲\n認證：WFTO（2010）+ B Corp（2017）+ 1% for the Planet（2017）+ Fairtrade Cotton',
+        dataC: '故事 1：尼泊爾 Sita（化名，48 歲）—— 從日薪工人到月收入穩定，女兒讀完高中\n故事 2：印度 Rajasthan 針織小組（25 名女性）—— 從季節性收入到全年穩定下單\n故事 3：上市金融業 ESG 副理回饋 —— 繭裹子寫進永續報告書、董事長親自提及\n故事 4：B Corp 入選過程 —— 從財務揭露、員工照顧到供應鏈透明，3 年通過認證的歷程',
+        dataD: '經費結構：自有銷售（B2C/B2B/通路）為主，部分公益專案接受贊助\n人力：設計 8 / 業務 5 / 品牌行銷 5 / 門市運營 10（估）\n合作夥伴：Mahaguthi（尼泊爾）、Sasha（印度）、Bangladesh 多個 NGO 等\n場地：台北 + 台中實體門市 4 家',
+        dataE: '認證：WFTO、B Corp、1% for the Planet、Fairtrade Cotton（四大國際認證）\n媒體：社企流深度專題、商業周刊封面、天下永續、CSRone\n通路：Pinkoi 長期合作、誠品駐點\n入選：經濟部社會創新平台、Buying Power 採購名單\n重要人物：Vinka & Liz 共同創辦人，台灣公平貿易教母級人物',
+        dataF: '同類品牌：光原社企（台灣原民）、芙彤園（弱勢家庭）、卓溪鄉合作社、印度 Khadi 純棉品牌\n獨特性：① 國際版圖（25 國）② 雙認證（WFTO + B Corp）③ 設計力強 ④ 16 年穩定供應鏈\n3 年計畫：B2B 從 25%→40%、推 ESG 客製專案、東南亞拓點',
+        dataG: '對方公司：永續部 3-5 年資歷（30-40 歲副理級）\n在乎：寫進永續報告書、SDGs 對應具體、商品品質、認證文件\n接收形式：完整 PDF 報告（10-20 頁）+ 1 頁式摘要供轉發老闆\n過去採購歷史：印刷品、有機米、咖啡為主；今年首次想升級到「有國際認證的社企商品」\n採購流程：3 個月（資格審→提案→董事會核可→下單）\n採購週期：每年 Q1（年禮）+ Q4（客戶答禮）\n過去拒絕過誰：曾拒絕純台灣本地原民品牌，理由是「故事感不夠國際化」\n切入時機：建議在 Q3（10-11 月）對接，準備明年 Q1 採購',
+      },
+    };
+
+    function loadExample(name) {
+      const map = { cocoon: COCOON_EXAMPLE };
+      const ex = map[name];
+      if (!ex) return;
+      if (!confirm('載入示範案例會覆蓋目前所有欄位內容，確定要繼續嗎？')) return;
+      setMultiValues('audience', ex.audience);
+      document.getElementById('audienceOther').value = ex.audienceOther;
+      document.getElementById('audienceCare').value = ex.audienceCare;
+      document.getElementById('audienceFormat').value = ex.audienceFormat;
+      setMultiValues('purpose', ex.purpose);
+      document.getElementById('purposeAction').value = ex.purposeAction;
+      document.getElementById('successMetric').value = ex.successMetric;
+      Object.keys(ex.questions).forEach(k => {
+        if (document.getElementById(k)) document.getElementById(k).value = ex.questions[k];
+      });
+      Object.keys(ex.data).forEach(k => {
+        if (document.getElementById(k)) document.getElementById(k).value = ex.data[k];
+      });
+      saveState();
+      goStep(5);
+      showToast('✓ 已載入繭裹子範例，跳到 Step 5 看 Prompt');
     }
 
     // ===== Init =====

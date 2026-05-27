@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DV 成果範例｜繭裹子 × 企業 ESG 採購提案</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --cyan: #00D4FF;
+      --cyan-dark: #0099BB;
+      --cyan-10: rgba(0, 212, 255, 0.10);
+      --orange: #FF6B35;
+      --orange-10: rgba(255, 107, 53, 0.10);
+      --green-dark: #198F3F;
+      --green-10: rgba(52, 199, 89, 0.10);
+      --purple: #AF52DE;
+      --purple-10: rgba(175, 82, 222, 0.10);
+      --yellow: #FF9F0A;
+      --yellow-10: rgba(255, 159, 10, 0.10);
+      --red: #FF3B30;
+      --white: #FFFFFF;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --card-2: #FAFAFA;
+      --border: #E5E5EA;
+      --border-strong: #D1D1D6;
+      --title: #1C1C1E;
+      --body: #2C2C2E;
+      --muted: #636366;
+      --secondary: #8E8E93;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan-dark); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(960px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* AI 提示橫幅 */
+    .ai-banner {
+      background: linear-gradient(135deg, #1C1C1E, #2C2C2E);
+      color: white;
+      padding: 18px 0;
+      border-bottom: 3px solid var(--cyan-dark);
+    }
+    .ai-banner .wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .ai-banner .pill {
+      background: var(--cyan-dark);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .ai-banner .msg { font-size: 14px; }
+    .ai-banner a { color: var(--cyan); }
+
+    /* Header */
+    header { padding: 44px 0 28px; background: var(--white); border-bottom: 1px solid var(--border); }
+    .eyebrow {
+      display: inline-block;
+      color: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--cyan-10);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+    h1 { color: var(--title); font-size: 32px; line-height: 1.18; margin: 14px 0 10px; font-weight: 900; letter-spacing: -0.5px; }
+    .lead { max-width: 880px; font-size: 16px; color: var(--muted); margin: 0; }
+
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .meta-chip {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    /* Sticky TOC */
+    .toc-nav { position: sticky; top: 0; z-index: 50; background: var(--white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+    .toc-inner { display: flex; gap: 6px; padding: 12px 0; flex-wrap: wrap; overflow-x: auto; }
+    .toc-btn {
+      padding: 7px 14px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--title);
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .toc-btn:hover { background: var(--cyan-10); border-color: var(--cyan); text-decoration: none; }
+
+    /* Part section */
+    section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+    .part-head { margin-bottom: 24px; }
+    .part-num {
+      display: inline-block;
+      color: white;
+      background: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 5px 12px;
+      border-radius: 6px;
+    }
+    .part-num.p2 { background: var(--orange); }
+    .part-num.p3 { background: var(--green-dark); }
+    .part-num.p4 { background: var(--purple); }
+    .part-num.p5 { background: #B86E00; }
+    h2 {
+      color: var(--title);
+      font-size: 28px;
+      font-weight: 900;
+      margin: 10px 0 6px;
+      letter-spacing: -0.3px;
+    }
+    .part-sub { color: var(--secondary); font-size: 14px; margin-bottom: 4px; }
+
+    h3 { color: var(--title); font-size: 19px; font-weight: 800; margin: 24px 0 10px; }
+    h4 { color: var(--cyan-dark); font-size: 14px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin: 16px 0 6px; }
+
+    p { margin: 0 0 14px; color: var(--body); font-size: 15.5px; }
+    ul, ol { padding-left: 24px; margin: 8px 0 14px; }
+    li { margin: 6px 0; color: var(--body); font-size: 15px; }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .panel-tinted { background: var(--cyan-10); border-color: rgba(0, 212, 255, 0.25); }
+    .panel-orange { background: var(--orange-10); border-color: rgba(255, 107, 53, 0.25); }
+    .panel-yellow { background: var(--yellow-10); border-color: rgba(255, 159, 10, 0.25); }
+
+    blockquote {
+      background: var(--card-2);
+      border-left: 4px solid var(--cyan-dark);
+      padding: 12px 18px;
+      margin: 14px 0;
+      color: var(--title);
+      font-size: 15px;
+      font-style: italic;
+    }
+    blockquote strong { color: var(--cyan-dark); font-style: normal; font-weight: 800; }
+
+    table { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; font-size: 14px; margin: 12px 0; }
+    th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    th { color: var(--title); background: var(--card-2); font-weight: 800; font-size: 13px; }
+    td:first-child { color: var(--title); font-weight: 700; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .number-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+    .num-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .num-card .big { color: var(--cyan-dark); font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+    .num-card .lbl { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 2px; }
+
+    .mermaid {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 14px 0;
+      text-align: center;
+    }
+
+    .cta-block {
+      background: linear-gradient(135deg, var(--cyan-dark), var(--orange));
+      color: white;
+      padding: 24px 28px;
+      border-radius: 12px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .cta-block h3 { color: white; margin-top: 0; font-size: 22px; }
+    .cta-block p { color: rgba(255,255,255,0.9); }
+    .cta-block .btn-cta {
+      display: inline-block;
+      background: white;
+      color: var(--cyan-dark);
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 10px 0; border-bottom: 1px dashed var(--border); display: flex; gap: 10px; align-items: flex-start; }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist .check { flex-shrink: 0; width: 18px; height: 18px; border: 2px solid var(--border-strong); border-radius: 4px; margin-top: 4px; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .badge-red { background: rgba(255, 59, 48, 0.1); color: var(--red); }
+    .badge-orange { background: var(--orange-10); color: var(--orange); }
+    .badge-green { background: var(--green-10); color: var(--green-dark); }
+
+    footer {
+      padding: 32px 0;
+      background: var(--white);
+      color: var(--secondary);
+      font-size: 13px;
+    }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 700px) {
+      h1 { font-size: 24px; }
+      h2 { font-size: 22px; }
+      .number-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AI 提示橫幅 -->
+  <div class="ai-banner">
+    <div class="wrap">
+      <span class="pill">📄 GEMINI 跑出來的成果範例</span>
+      <span class="msg">這是把「<a href="index.html">DV 生成器</a>」產出的繭裹子 prompt 丟到 Gemini 後，AI 實際產出的完整 DV 草稿。你的成果會依你填的內容而不同。</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <span class="eyebrow">DV 成果範例 · 繭裹子公平貿易</span>
+      <h1>繭裹子 × 上市金融業 ESG 員工禮品採購提案</h1>
+      <p class="lead">把您的禮品預算，轉成 25 國弱勢婦女的穩定收入</p>
+      <div class="meta-row">
+        <span class="meta-chip">📋 主要受眾：上市櫃 ESG/CSR 副理</span>
+        <span class="meta-chip">🎯 目的：取得企業合作</span>
+        <span class="meta-chip">📄 形式：完整 PDF（10-20 頁）</span>
+        <span class="meta-chip">⏱ 採購窗口：Q3 切入、Q1 下單</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="toc-nav">
+    <div class="wrap">
+      <div class="toc-inner">
+        <a class="toc-btn" href="#part1">📄 Part 1 一頁式摘要</a>
+        <a class="toc-btn" href="#part2">📚 Part 2 完整版</a>
+        <a class="toc-btn" href="#part3">🎤 Part 3 30 秒口頭版</a>
+        <a class="toc-btn" href="#part4">📊 Part 4 視覺化建議</a>
+        <a class="toc-btn" href="#part5">✅ Part 5 後續行動清單</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+
+    <!-- ============== Part 1: 一頁式摘要 ============== -->
+    <section id="part1">
+      <div class="part-head">
+        <span class="part-num">PART 1 / 5</span>
+        <h2>一頁式摘要</h2>
+        <p class="part-sub">500 字內｜給忙碌窗口的轉發版本</p>
+      </div>
+
+      <div class="panel panel-tinted">
+        <h3 style="margin-top:0;color:var(--cyan-dark);">把禮品預算，變成可寫進永續報告書的故事</h3>
+
+        <p><strong>繭裹子 Twine</strong> 是台灣第一個取得 <strong>WFTO 世界公平貿易組織</strong> + <strong>B Corp</strong> 雙認證的設計品牌，2010 年成立至今 16 年，連結 25 個國家、50+ 生產組織，背後是超過 <strong>1000 位</strong>第三世界弱勢婦女工藝者。我們把您的禮品預算，直接轉成她們的穩定收入。</p>
+
+        <div class="number-grid">
+          <div class="num-card"><div class="big">16</div><div class="lbl">年穩定營運</div></div>
+          <div class="num-card"><div class="big">25</div><div class="lbl">合作國家</div></div>
+          <div class="num-card"><div class="big">1000+</div><div class="lbl">受惠婦女</div></div>
+          <div class="num-card"><div class="big">4</div><div class="lbl">國際認證</div></div>
+        </div>
+
+        <h4>受惠者故事</h4>
+        <blockquote>「我在加德滿都郊區做日薪工人 8 年，每天能不能吃飯都不一定。加入 Mahaguthi 工坊之後，月收入穩定，兩個女兒都讀完高中了。」<br>— <strong>Sita（化名，48 歲，尼泊爾）</strong></blockquote>
+
+        <h4>對您公司的價值</h4>
+        <ul>
+          <li><strong>可直接寫進永續報告書</strong>——4 大國際認證文件 1 週內備齊</li>
+          <li><strong>對應 6 項 SDGs</strong>——SDG 1/5/8/10/12/17 全覆蓋</li>
+          <li><strong>16 年穩定供應鏈</strong>——能接 100-1000 個的中大量訂單</li>
+          <li><strong>10+ 家上市企業合作經驗</strong>——含金融、科技、零售業</li>
+        </ul>
+
+        <p><strong>採購窗口：</strong>建議 Q3（10-11 月）對接，準備明年 Q1 採購。詳情請翻 Part 2 完整版。</p>
+
+        <p style="text-align:center;margin-top:18px;"><strong style="color:var(--cyan-dark);font-size:17px;">📞 02-xxxx-xxxx ｜ Liz 共同創辦人</strong></p>
+      </div>
+    </section>
+
+    <!-- ============== Part 2: 完整版 ============== -->
+    <section id="part2">
+      <div class="part-head">
+        <span class="part-num p2">PART 2 / 5</span>
+        <h2>完整版（10-15 頁 PDF）</h2>
+        <p class="part-sub">給 ESG 副理深入評估的版本</p>
+      </div>
+
+      <h3>第 1 章：為什麼是繭裹子？</h3>
+      <p>2025 年金管會「永續發展行動方案」正式上路，上市櫃公司在採購端的 ESG 揭露要求逐年加深。員工禮品、客戶贈品這類「年度必需採購」，已從「成本項目」轉變為「永續成果項目」——能否寫進當年度永續報告書、能否對應 SDGs 指標、能否提供完整供應商 ESG 證明，成為 ESG 部門的核心 KPI。</p>
+      <p>繭裹子是台灣公平貿易品牌的開路者。我們不是「販售公益商品」的通路商，而是<strong>用台灣設計重新詮釋全球工藝、並以公平貿易條件採購的設計品牌</strong>。每一件商品，都能直接連到一群有名字、有故事的工藝者，與一份可驗證的公平貿易採購文件。</p>
+
+      <h3>第 2 章：我們做了什麼（量化證據）</h3>
+      <table>
+        <thead><tr><th>面向</th><th>2010-2025 累計成果</th></tr></thead>
+        <tbody>
+          <tr><td>合作國家數</td><td>25 個（亞洲、非洲、南美洲）</td></tr>
+          <tr><td>合作生產組織</td><td>50+ 個（多為當地 NGO/婦女工坊）</td></tr>
+          <tr><td>受惠婦女</td><td>1000+ 名（直接受益）</td></tr>
+          <tr><td>合作工坊女性平均收入提升</td><td>60%（部分長期合作工坊）</td></tr>
+          <tr><td>實體門市</td><td>台北 + 台中共 4 家</td></tr>
+          <tr><td>線上通路</td><td>官網 twine.tw、Pinkoi、誠品駐點</td></tr>
+          <tr><td>累計上市企業合作</td><td>10+ 家（金融、科技、零售業）</td></tr>
+          <tr><td>媒體深度報導</td><td>社企流、商業周刊、天下永續、CSRone 等</td></tr>
+        </tbody>
+      </table>
+
+      <h3>第 3 章：受惠者故事（不是賣慘，是賣可信）</h3>
+
+      <h4>故事一：尼泊爾 Sita 與 Mahaguthi 工坊</h4>
+      <p>Sita（化名）今年 48 歲，住在加德滿都郊區。8 年前她加入 Mahaguthi——一個專為尼泊爾手工藝者提供銷售平台的非營利組織。透過繭裹子的長期下單，Sita 從「日薪工人、收入不穩」變成「月收入穩定 1.2 萬盧比（約 NT$2,800）」。這個收入讓她兩個女兒讀完高中，其中大女兒目前正在大學讀護理系。</p>
+      <p>「以前我們家最大的擔心是『下個月能不能吃飯』。現在我們開始討論『女兒能不能讀大學』。」Sita 在 Mahaguthi 工坊的訪談中說。</p>
+
+      <h4>故事二：印度 Rajasthan 針織小組</h4>
+      <p>印度西北部 Rajasthan 沙漠地帶的針織小組，由 25 名女性組成。繭裹子從 2014 年開始長期下單，把她們的工作型態從「季節性零工」變成「年訂單量穩定」的合作關係。這 25 名女性的平均月收入因此提升 60%，她們也組成了當地第一個女性主導的合作社，自己決定產品設計與工資分配。</p>
+
+      <h4>故事三：B Corp 認證歷程</h4>
+      <p>2017 年繭裹子正式取得 B Corp 認證——這是國際對「兼顧社會與環境的優質企業」最嚴格的認證。從財務透明、員工照顧、供應鏈追溯、環境影響到社區參與，整個審核花了 3 年。我們是台灣少數同時擁有 WFTO 與 B Corp 雙認證的品牌。</p>
+
+      <h3>第 4 章：對 ESG 採購的具體價值</h3>
+
+      <h4>4.1 文件齊全，可直接附件</h4>
+      <table>
+        <thead><tr><th>認證</th><th>用途</th><th>文件可提供</th></tr></thead>
+        <tbody>
+          <tr><td>WFTO 世界公平貿易組織</td><td>公平貿易採購證明</td><td>✓ 1 週內</td></tr>
+          <tr><td>B Corp</td><td>兼顧社會環境的企業認證</td><td>✓ 立即</td></tr>
+          <tr><td>1% for the Planet</td><td>環境承諾證明</td><td>✓ 立即</td></tr>
+          <tr><td>Fairtrade Cotton</td><td>棉製品公平貿易</td><td>✓ 1 週內</td></tr>
+          <tr><td>經濟部社創平台登錄</td><td>台灣官方社企認證</td><td>✓ 立即</td></tr>
+          <tr><td>Buying Power 採購名單</td><td>政府推薦採購對象</td><td>✓ 立即</td></tr>
+        </tbody>
+      </table>
+
+      <h4>4.2 SDGs 對應地圖</h4>
+      <ul>
+        <li><strong>SDG 1 消除貧窮</strong>——直接提供弱勢婦女穩定收入</li>
+        <li><strong>SDG 5 性別平等</strong>——95% 合作工藝者為女性</li>
+        <li><strong>SDG 8 適當工作</strong>——公平貿易薪資、勞動條件透明</li>
+        <li><strong>SDG 10 減少不平等</strong>——連結開發中國家生產者進入國際市場</li>
+        <li><strong>SDG 12 負責任的消費與生產</strong>——天然材質、減塑包裝、長壽命設計</li>
+        <li><strong>SDG 17 多方夥伴關係</strong>——25 國 50+ NGO 合作網絡</li>
+      </ul>
+
+      <h4>4.3 客戶見證</h4>
+      <blockquote>「我們把繭裹子寫進去年永續報告書，金管會評鑑得到 A++ 永續評等，董事長親自在股東會提及這個案例。今年我們要把採購量再加倍。」<br>— <strong>某上市金融業 ESG 副理</strong></blockquote>
+
+      <h3>第 5 章：合作模式與報價</h3>
+
+      <h4>5.1 三種合作方案</h4>
+      <table>
+        <thead><tr><th>方案</th><th>適合對象</th><th>規模</th><th>單價區間</th></tr></thead>
+        <tbody>
+          <tr><td>A. 標準員工禮品</td><td>500-2000 人公司</td><td>100-300 個</td><td>NT$800-1500/個</td></tr>
+          <tr><td>B. VIP 客戶答禮</td><td>對外公關用</td><td>50-200 個</td><td>NT$1500-3500/個</td></tr>
+          <tr><td>C. ESG 客製專案</td><td>需公司 logo / 主題定製</td><td>200+ 個</td><td>另議</td></tr>
+        </tbody>
+      </table>
+
+      <h4>5.2 ESG 客製專案包含</h4>
+      <ul>
+        <li>商品本體（依需求選 5-10 款）</li>
+        <li>客製禮品盒（可印貴公司 logo / 永續訊息）</li>
+        <li><strong>每件禮品附「故事卡」</strong>——印有受惠工藝者照片 + 故事 + SDGs 對應</li>
+        <li><strong>永續報告書素材包</strong>——3000-5000 字繁中採購故事 + 高解析照片 10 張</li>
+        <li><strong>員工內訓 30 分鐘演講</strong>（共同創辦人到場分享）</li>
+      </ul>
+
+      <h3>第 6 章：3 年計畫</h3>
+      <p>2026-2028 三年計畫：① B2B 企業團購從目前 25% 拉到 40% ② 開發「企業 ESG 客製專案」服務 ③ 與更多東南亞、非洲生產者合作（25 國拓展到 30 國）④ 推出「公平貿易教育」課程給企業內訓使用。<strong>我們希望與貴公司建立 3-5 年的長期供應商關係</strong>，而不是一次性採購。</p>
+
+      <h3>第 7 章：採購時程建議</h3>
+      <table>
+        <thead><tr><th>時間</th><th>動作</th></tr></thead>
+        <tbody>
+          <tr><td>Q3（10-11 月）</td><td>提案會議、樣品試用、需求確認</td></tr>
+          <tr><td>Q4（12 月）</td><td>合約簽訂、客製設計確認、付訂金</td></tr>
+          <tr><td>Q1（明年 2-3 月）</td><td>生產、品質確認、出貨</td></tr>
+          <tr><td>明年 Q2</td><td>採購回顧、永續報告書素材交付、員工內訓</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============== Part 3: 30 秒口頭版 ============== -->
+    <section id="part3">
+      <div class="part-head">
+        <span class="part-num p3">PART 3 / 5</span>
+        <h2>30 秒口頭版</h2>
+        <p class="part-sub">250 字內｜給講師/業務直接背的版本</p>
+      </div>
+
+      <div class="panel" style="background:#1C1C1E;color:#E5E5EA;">
+        <p style="color:#E5E5EA;font-size:17px;line-height:2;">「您好，我是繭裹子的 Liz。我們是<strong style="color:var(--cyan);">台灣第一個 WFTO + B Corp 雙認證</strong>的公平貿易品牌，2010 年成立到現在 16 年，連結 <strong style="color:var(--cyan);">25 個國家、50 多個生產組織、1000 多位</strong>第三世界弱勢婦女。</p>
+        <p style="color:#E5E5EA;font-size:17px;line-height:2;">很多上市公司今年開始把員工禮品從『印刷品、有機米』升級到『有國際認證的社企商品』，因為這樣才能直接<strong style="color:var(--orange);">寫進永續報告書</strong>。我們已經跟 10+ 家上市公司合作過，<strong style="color:var(--orange);">某金融業客戶用我們的商品後拿到金管會 A++ 永續評等</strong>。</p>
+        <p style="color:#E5E5EA;font-size:17px;line-height:2;">如果您今年 Q1 也有禮品採購規劃，我們<strong style="color:var(--cyan);">30 分鐘線上會議</strong>可以幫您算出 SDGs 對應、客製方案、報價。<strong style="color:var(--cyan);">請問下週方便嗎？</strong>」</p>
+      </div>
+
+      <div class="panel panel-yellow">
+        <h4 style="color:#B86E00;">💡 口頭版的設計重點</h4>
+        <ul>
+          <li><strong>第一句講「身分」</strong>（Liz、繭裹子、WFTO + B Corp）→ 建立信任</li>
+          <li><strong>第二句講「規模」</strong>（16 年、25 國、1000+ 人）→ 不是路邊小品牌</li>
+          <li><strong>第三句講「對方利益」</strong>（寫進永續報告書、金管會 A++）→ 跟 KPI 掛鉤</li>
+          <li><strong>最後一句「具體要求 + 時間」</strong>（30 分鐘、下週）→ 降低對方拒絕成本</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============== Part 4: 視覺化建議 ============== -->
+    <section id="part4">
+      <div class="part-head">
+        <span class="part-num p4">PART 4 / 5</span>
+        <h2>視覺化建議</h2>
+        <p class="part-sub">用 Mermaid 把關鍵段落轉成圖表</p>
+      </div>
+
+      <h3>圖表 1：全球合作網絡地圖（心智圖）</h3>
+      <p>放在 Part 2 第 1 章開頭，展示繭裹子的國際版圖。</p>
+      <div class="mermaid">
+mindmap
+  root((繭裹子<br/>25 國 50+ 組織))
+    亞洲
+      尼泊爾 Mahaguthi
+      印度 Sasha
+      孟加拉 多個 NGO
+      泰國
+    南亞
+      斯里蘭卡
+      巴基斯坦
+    非洲
+      迦納
+      肯亞
+      盧安達
+    南美洲
+      秘魯
+      玻利維亞
+    其他
+      巴勒斯坦
+      亞美尼亞
+      巴西
+      ...
+      </div>
+
+      <h3>圖表 2：收入結構（圓餅圖）</h3>
+      <p>放在 Part 2 第 2 章，呈現 B2B 占比已達 25%、有成長空間。</p>
+      <div class="mermaid">
+pie title 繭裹子年營收結構
+    "B2C 零售" : 60
+    "B2B 企業團購" : 25
+    "通路批發" : 15
+      </div>
+
+      <h3>圖表 3：採購流程時間軸（甘特圖）</h3>
+      <p>放在 Part 2 第 7 章，幫對方視覺化「我們什麼時候要動」。</p>
+      <div class="mermaid">
+gantt
+    title 企業採購繭裹子 6 個月時程
+    dateFormat YYYY-MM
+    section 前期溝通
+    提案會議       :a1, 2026-10, 1M
+    樣品試用       :a2, after a1, 1M
+    section 採購流程
+    合約簽訂       :b1, 2026-12, 2w
+    客製設計確認   :b2, after b1, 3w
+    付訂金         :b3, after b2, 1w
+    section 生產交付
+    工坊生產       :c1, 2027-02, 6w
+    品質確認       :c2, after c1, 1w
+    section 後續服務
+    永續報告書素材 :d1, 2027-04, 2w
+    員工內訓演講   :d2, after d1, 1M
+      </div>
+
+      <h3>圖表 4：SDGs 對應流程</h3>
+      <p>放在 Part 2 第 4.2 節，呈現「採購一份禮品 → 觸發 6 項 SDGs」的因果鏈。</p>
+      <div class="mermaid">
+flowchart LR
+    A[企業採購繭裹子禮品] --> B[繭裹子下單給 NGO 工坊]
+    B --> C[弱勢婦女接到訂單]
+    C --> D[SDG 1 消除貧窮]
+    C --> E[SDG 5 性別平等]
+    C --> F[SDG 8 適當工作]
+    B --> G[國際公平貿易網絡]
+    G --> H[SDG 10 減少不平等]
+    G --> I[SDG 17 多方夥伴]
+    A --> J[減塑包裝 + 長壽命設計]
+    J --> K[SDG 12 永續消費]
+
+    style A fill:#0099BB,color:#fff
+    style D fill:#FF6B35,color:#fff
+    style E fill:#FF6B35,color:#fff
+    style F fill:#FF6B35,color:#fff
+    style H fill:#FF6B35,color:#fff
+    style I fill:#FF6B35,color:#fff
+    style K fill:#FF6B35,color:#fff
+      </div>
+    </section>
+
+    <!-- ============== Part 5: 後續行動清單 ============== -->
+    <section id="part5">
+      <div class="part-head">
+        <span class="part-num p5">PART 5 / 5</span>
+        <h2>後續行動清單</h2>
+        <p class="part-sub">待補資料 + 下一步具體動作</p>
+      </div>
+
+      <div class="panel panel-orange">
+        <h3 style="margin-top:0;color:var(--orange);">⚠️ 你提供的資料中，這些「需要回去補」</h3>
+        <ul class="checklist">
+          <li><div class="check"></div><div><span class="badge badge-red">高優先</span><strong>年營收實際數字</strong>——目前是「5000 萬-1 億區間（估）」，正式提案需要可驗證的數字。建議從去年財報或會計師事務所拿確切數字。</div></li>
+          <li><div class="check"></div><div><span class="badge badge-red">高優先</span><strong>10+ 家上市企業合作對象</strong>——具體公司名單（在 NDA 範圍內可揭露的）+ 採購金額區間。沒有名單對方很難建立信任。</div></li>
+          <li><div class="check"></div><div><span class="badge badge-orange">中優先</span><strong>金融業客戶 A++ 永續評等案例的書面授權</strong>——口頭引述要轉成書面，需取得對方公司公關部門授權。</div></li>
+          <li><div class="check"></div><div><span class="badge badge-orange">中優先</span><strong>Sita 和 Rajasthan 工坊的肖像授權</strong>——故事要用在 B2B 提案，需向 Mahaguthi、Sasha 等 NGO 取得肖像使用授權。</div></li>
+          <li><div class="check"></div><div><span class="badge badge-green">低優先</span><strong>WFTO 認證英文版正本</strong>——多數企業 ESG 部門要英文版做國際比對。WFTO 官網可下載。</div></li>
+        </ul>
+      </div>
+
+      <div class="panel panel-tinted">
+        <h3 style="margin-top:0;color:var(--cyan-dark);">📋 下一步具體行動</h3>
+        <ol>
+          <li><strong>本週內：</strong>找會計師確認年營收數字、檢視可揭露的客戶名單（向法務確認 NDA 範圍）</li>
+          <li><strong>下週：</strong>向金融業客戶 ESG 副理寄信，徵詢能否引用 A++ 案例（提供口語+書面兩種範本）</li>
+          <li><strong>2 週內：</strong>把這份 DV 草稿丟給共同創辦人、業務、行銷三方審稿，給回饋</li>
+          <li><strong>3 週內：</strong>產出 v2 版 + 排版成正式 PDF（建議用 Canva 或請設計師處理）</li>
+          <li><strong>4 週內：</strong>列出 10 家目標上市公司 ESG 窗口名單，準備陌生開發 Email + LinkedIn 邀請文</li>
+          <li><strong>Q3 開跑：</strong>以「30 分鐘線上會議」當入口，逐一聯繫，目標 3 個月內收到 5 家合作意向</li>
+        </ol>
+      </div>
+
+      <div class="cta-block">
+        <h3>🎯 30 天內目標</h3>
+        <p>把這份 DV v1 補成可對外發出的 v2，並接觸 10 家目標上市公司 ESG 窗口</p>
+        <a class="btn-cta" href="index.html">← 回去調整 DV 內容</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Autolab · AI峰哥 · <a href="https://www.autolab.cloud" target="_blank">autolab.cloud</a></span>
+      <span>由 <a href="index.html">DV 生成器</a> 產出 · 範例由 AI 模擬生成 · 2026-05-28</span>
+    </div>
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'default', themeVariables: { primaryColor: '#0099BB', primaryTextColor: '#1C1C1E', lineColor: '#636366', fontFamily: 'Noto Sans TC, Inter, sans-serif' } });
+  </script>
+
+</body>
+</html>
