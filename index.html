@@ -124,6 +124,10 @@
       gap: 20px;
       margin-bottom: 32px;
     }
+    .tool-card.pink::before { background: var(--pink, #FF2D55); }
+    .tool-card.pink .tool-name .sub { color: var(--pink, #FF2D55); }
+    .tool-card.pink .tool-arrow { color: var(--pink, #FF2D55); }
+    :root { --pink: #FF2D55; }
 
     .tool-card {
       background: var(--card);
@@ -368,14 +372,31 @@
         <span class="tool-icon">📚</span>
         <div class="tool-name">
           <span class="sub">Tool 4</span>
-          實用提示詞 10 案例
+          實用提示詞 10 案例（文字類）
         </div>
-        <p class="tool-desc">社會企業最常用的 10 個 AI 應用：志工招募貼文、活動文案、滿意度問卷、捐款人感謝信、人物誌、短影音腳本、提案摘要、服務流程圖、客服 FAQ、影響力故事。<strong>一鍵複製給 Claude</strong>。</p>
+        <p class="tool-desc">社會企業最常用的 10 個 AI 文字應用：志工招募貼文、活動文案、滿意度問卷、捐款人感謝信、人物誌、短影音腳本、提案摘要、服務流程圖、客服 FAQ、影響力故事。<strong>一鍵複製給 Claude</strong>。</p>
         <div class="tool-features">
           <span>10 個案例</span>
           <span>角色×情境×期望</span>
           <span>一鍵複製</span>
           <span>含成果範例</span>
+        </div>
+        <span class="tool-arrow">開始使用 →</span>
+      </a>
+
+      <!-- Tool 5 圖片提示詞 -->
+      <a class="tool-card pink" href="image-prompts.html">
+        <span class="tool-icon">🎨</span>
+        <div class="tool-name">
+          <span class="sub">Tool 5</span>
+          AI 生圖提示詞 20 案例
+        </div>
+        <p class="tool-desc">海報、DM、IG、年報、商品照、講師形象、感謝信...20 個社創組織常用圖片場景。用「<strong>主體→構圖→動作→場景→風格</strong>」5 步漸進法。Gemini / ChatGPT / Midjourney 都適用。</p>
+        <div class="tool-features">
+          <span>20 個案例</span>
+          <span>5 步漸進心法</span>
+          <span>中英文版</span>
+          <span>含構圖示範</span>
         </div>
         <span class="tool-arrow">開始使用 →</span>
       </a>

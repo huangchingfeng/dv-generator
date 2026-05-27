@@ -4,14 +4,15 @@
 
 **🌐 線上使用**：https://huangchingfeng.github.io/dv-generator/
 
-## 4 個工具
+## 5 個工具
 
 | 工具 | 連結 | 用途 |
 |------|------|------|
 | 🎯 **DV 價值展示生成器** | [dv.html](https://huangchingfeng.github.io/dv-generator/dv.html) | 12 引導問題填表單產 AI Prompt（內部對齊→對外溝通） |
 | 🎨 **SBMC 商業畫布生成器** | [sbmc.html](https://huangchingfeng.github.io/dv-generator/sbmc.html) | 13 格畫布即時編輯，下載 PNG / Excel / AI 畫畫布 |
 | 📊 **Mermaid 圖表生成器** | [mermaid.html](https://huangchingfeng.github.io/dv-generator/mermaid.html) | 貼 AI 代碼變圖（圓餅/流程/心智/甘特/長條/矩陣）|
-| 📚 **實用提示詞 10 案例** | [prompts.html](https://huangchingfeng.github.io/dv-generator/prompts.html) | 志工招募、活動文案、問卷、人物誌、短影音⋯⋯一鍵複製給 Claude |
+| 📚 **文字 Prompt 10 案例** | [prompts.html](https://huangchingfeng.github.io/dv-generator/prompts.html) | 志工招募、活動文案、問卷、人物誌、短影音⋯⋯一鍵複製給 Claude |
+| 🎨 **AI 生圖 Prompt 20 案例** | [image-prompts.html](https://huangchingfeng.github.io/dv-generator/image-prompts.html) | 海報/DM/IG/年報/商品照⋯⋯用「主體→構圖→動作→場景→風格」5 步漸進 |
 
 ## 工作流推薦（3 步驟）
 

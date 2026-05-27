@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 圖片 Prompt 20 案例｜5 步漸進心法</title>
+  <meta name="description" content="社會企業 / 社創組織常用的 20 個 AI 生圖場景：海報、DM、IG、年報、商品照、感謝信。用「主體→構圖→動作→場景→風格」5 步漸進法。Midjourney / DALL-E / Imagen / Gemini / Firefly 都適用。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00D4FF;
+      --cyan-dark: #0099BB;
+      --cyan-10: rgba(0, 212, 255, 0.10);
+      --orange: #FF6B35;
+      --orange-10: rgba(255, 107, 53, 0.10);
+      --green-dark: #198F3F;
+      --green-10: rgba(52, 199, 89, 0.10);
+      --purple: #AF52DE;
+      --purple-10: rgba(175, 82, 222, 0.10);
+      --yellow: #FF9F0A;
+      --yellow-10: rgba(255, 159, 10, 0.10);
+      --pink: #FF2D55;
+      --pink-10: rgba(255, 45, 85, 0.10);
+      --white: #FFFFFF;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --card-2: #FAFAFA;
+      --border: #E5E5EA;
+      --border-strong: #D1D1D6;
+      --title: #1C1C1E;
+      --body: #2C2C2E;
+      --muted: #636366;
+      --secondary: #8E8E93;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --code-bg: #1C1C1E;
+      --code-fg: #E5E5EA;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan-dark); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Header */
+    header { padding: 36px 0 24px; background: var(--white); border-bottom: 1px solid var(--border); }
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .eyebrow {
+      display: inline-block; color: var(--pink); font-size: 11px; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase; background: var(--pink-10);
+      padding: 6px 12px; border-radius: 6px;
+    }
+    h1 { color: var(--title); font-size: 32px; line-height: 1.18; margin: 12px 0 8px; font-weight: 900; letter-spacing: -0.5px; }
+    .lead { max-width: 800px; font-size: 15px; color: var(--muted); margin: 0; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--title); font-size: 13px; font-weight: 700; white-space: nowrap;
+    }
+    .back-link:hover { background: var(--cyan-10); border-color: var(--cyan); text-decoration: none; }
+
+    /* 心法區塊 */
+    .method {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin: 24px 0;
+      box-shadow: var(--shadow);
+    }
+    .method h2 { color: var(--title); font-size: 22px; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.3px; }
+    .method .h-sub { color: var(--muted); font-size: 13.5px; margin-bottom: 18px; }
+    .method-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .ms-card {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .ms-card .icon { font-size: 24px; }
+    .ms-card .num { color: var(--pink); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    .ms-card .name { color: var(--title); font-size: 14px; font-weight: 800; margin: 4px 0; }
+    .ms-card .desc { color: var(--muted); font-size: 11.5px; line-height: 1.5; }
+
+    .recommend {
+      background: var(--cyan-10);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 14px 0 0;
+      font-size: 13.5px;
+      color: var(--title);
+    }
+    .recommend strong { color: var(--cyan-dark); font-weight: 800; }
+    .recommend a { color: var(--cyan-dark); }
+
+    /* Sticky TOC */
+    .toc-nav { position: sticky; top: 0; z-index: 50; background: var(--white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+    .toc-inner { display: flex; gap: 6px; padding: 12px 0; flex-wrap: wrap; overflow-x: auto; }
+    .toc-btn {
+      padding: 6px 10px; background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 6px; color: var(--title); font-weight: 700; font-size: 12px; white-space: nowrap;
+    }
+    .toc-btn:hover { background: var(--pink-10); border-color: var(--pink); text-decoration: none; color: var(--pink); }
+    .toc-btn .num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 8px; background: var(--pink);
+      color: white; font-size: 9px; font-weight: 800; margin-right: 4px;
+    }
+
+    main { padding: 28px 0 80px; }
+
+    /* Case Card */
+    .case {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 30px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 70px;
+    }
+    .case-head { margin-bottom: 16px; padding-bottom: 14px; border-bottom: 2px dashed var(--border); }
+    .case-num {
+      display: inline-block; padding: 4px 10px;
+      background: var(--pink); color: white;
+      border-radius: 6px; font-size: 11px; font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .case-type {
+      display: inline-block; padding: 4px 10px;
+      background: var(--card-2); color: var(--muted);
+      border-radius: 6px; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.3px; margin-left: 6px;
+      border: 1px solid var(--border);
+    }
+    .case h2 { color: var(--title); font-size: 22px; font-weight: 900; margin: 8px 0 6px; letter-spacing: -0.2px; }
+    .situation { color: var(--muted); font-size: 14px; margin: 0; }
+    .situation strong { color: var(--title); font-weight: 700; }
+
+    /* 5 步漸進 */
+    .build-steps { margin-top: 18px; }
+    .build-step {
+      background: var(--card-2);
+      border-left: 3px solid var(--cyan-dark);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .build-step.s1 { border-color: var(--cyan-dark); }
+    .build-step.s2 { border-color: var(--orange); }
+    .build-step.s3 { border-color: var(--green-dark); }
+    .build-step.s4 { border-color: var(--purple); }
+    .build-step.s5 { border-color: var(--pink); }
+    .bs-label {
+      display: inline-block; font-size: 10.5px; font-weight: 800;
+      letter-spacing: 0.8px; text-transform: uppercase; margin-right: 6px;
+      color: var(--cyan-dark);
+    }
+    .build-step.s2 .bs-label { color: var(--orange); }
+    .build-step.s3 .bs-label { color: var(--green-dark); }
+    .build-step.s4 .bs-label { color: var(--purple); }
+    .build-step.s5 .bs-label { color: var(--pink); }
+    .bs-text { color: var(--body); }
+    .bs-text strong { color: var(--title); font-weight: 700; }
+
+    /* 最終 prompt */
+    .final-block {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .block-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px; gap: 10px; flex-wrap: wrap;
+    }
+    .block-title {
+      color: var(--title); font-size: 14px; font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .block-title .icon { margin-right: 4px; }
+    .btn-copy {
+      padding: 6px 12px; background: var(--pink); color: white;
+      border: none; border-radius: 6px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-copy:hover { background: #e02849; }
+    .prompt-box {
+      background: var(--code-bg); color: var(--code-fg);
+      border-radius: 8px; padding: 14px 18px;
+      font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 12.5px; line-height: 1.7;
+      white-space: pre-wrap; word-break: break-word;
+    }
+
+    /* 預期成果 */
+    .result-block {
+      margin-top: 14px;
+      background: var(--green-10);
+      border-left: 4px solid var(--green-dark);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 13.5px;
+      color: var(--body);
+      line-height: 1.7;
+    }
+    .result-block strong { color: var(--green-dark); font-weight: 800; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: var(--title); color: white; padding: 12px 24px;
+      border-radius: 8px; font-weight: 700; font-size: 14px;
+      z-index: 1000; box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    footer {
+      padding: 28px 0; background: var(--white);
+      border-top: 1px solid var(--border); color: var(--secondary); font-size: 13px;
+    }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 800px) {
+      h1 { font-size: 22px; }
+      .case { padding: 20px 22px; }
+      .case h2 { font-size: 18px; }
+      .method-steps { grid-template-columns: repeat(2, 1fr); }
+      .header-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <div class="header-row">
+        <div>
+          <span class="eyebrow">AUTOLAB · AI 圖片 Prompt 20 案例</span>
+          <h1>🎨 AI 生圖 5 步心法 × 20 個社創組織常用場景</h1>
+          <p class="lead">海報、DM、IG、年報、商品照、感謝信、活動主視覺...用「<strong>主體 → 構圖 → 動作 → 場景 → 風格</strong>」5 步漸進法寫 prompt。每個案例都有完整可複製的最終 prompt。</p>
+        </div>
+        <a class="back-link" href="index.html">← 回首頁</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- 心法 -->
+    <section class="method">
+      <h2>📖 5 步漸進心法</h2>
+      <p class="h-sub">每加一層、AI 越懂你要什麼。從「罐頭素材」變「品牌專屬視覺」。</p>
+      <div class="method-steps">
+        <div class="ms-card">
+          <div class="icon">🎯</div>
+          <div class="num">Step 1</div>
+          <div class="name">主體</div>
+          <div class="desc">畫面的主角是誰？什麼？</div>
+        </div>
+        <div class="ms-card">
+          <div class="icon">📷</div>
+          <div class="num">Step 2</div>
+          <div class="name">構圖</div>
+          <div class="desc">什麼角度、什麼景別？</div>
+        </div>
+        <div class="ms-card">
+          <div class="icon">🏃</div>
+          <div class="num">Step 3</div>
+          <div class="name">動作</div>
+          <div class="desc">主體在做什麼？態度？</div>
+        </div>
+        <div class="ms-card">
+          <div class="icon">🏞</div>
+          <div class="num">Step 4</div>
+          <div class="name">場景</div>
+          <div class="desc">在哪裡？什麼情境？</div>
+        </div>
+        <div class="ms-card">
+          <div class="icon">✨</div>
+          <div class="num">Step 5</div>
+          <div class="name">風格</div>
+          <div class="desc">視覺調性？品牌感？</div>
+        </div>
+      </div>
+      <div class="recommend">
+        <strong>💡 推薦工具：</strong>
+        <a href="https://gemini.google.com/" target="_blank">Gemini（Nano Banana）</a>｜
+        <a href="https://chat.openai.com/" target="_blank">ChatGPT（DALL-E 3）</a>｜
+        <a href="https://www.midjourney.com/" target="_blank">Midjourney</a>｜
+        <a href="https://firefly.adobe.com/" target="_blank">Adobe Firefly</a>｜
+        <a href="https://www.canva.com/ai-image-generator/" target="_blank">Canva AI</a>
+        <br>📌 <strong>中文 prompt 在 Gemini / ChatGPT 已可直接使用</strong>；Midjourney 建議翻成英文（每個案例都有英文版）。
+      </div>
+    </section>
+
+    <!-- TOC -->
+    <div class="toc-nav" style="position:relative;margin-bottom:20px;border-radius:10px;border:1px solid var(--border);">
+      <div style="padding:0 16px;">
+        <div class="toc-inner">
+          <a class="toc-btn" href="#c1"><span class="num">1</span>募款餐會主視覺</a>
+          <a class="toc-btn" href="#c2"><span class="num">2</span>志工招募海報</a>
+          <a class="toc-btn" href="#c3"><span class="num">3</span>ESG 提案封面</a>
+          <a class="toc-btn" href="#c4"><span class="num">4</span>受惠者故事 IG</a>
+          <a class="toc-btn" href="#c5"><span class="num">5</span>活動 DM 主視覺</a>
+          <a class="toc-btn" href="#c6"><span class="num">6</span>LINE 群預告圖</a>
+          <a class="toc-btn" href="#c7"><span class="num">7</span>年報封面</a>
+          <a class="toc-btn" href="#c8"><span class="num">8</span>短影音首幀</a>
+          <a class="toc-btn" href="#c9"><span class="num">9</span>課程招生海報</a>
+          <a class="toc-btn" href="#c10"><span class="num">10</span>手作商品攝影</a>
+          <a class="toc-btn" href="#c11"><span class="num">11</span>講師形象照</a>
+          <a class="toc-btn" href="#c12"><span class="num">12</span>環教體驗 IG</a>
+          <a class="toc-btn" href="#c13"><span class="num">13</span>禮盒包裝視覺</a>
+          <a class="toc-btn" href="#c14"><span class="num">14</span>感謝信封面</a>
+          <a class="toc-btn" href="#c15"><span class="num">15</span>SDGs 對比圖</a>
+          <a class="toc-btn" href="#c16"><span class="num">16</span>社區活動文宣</a>
+          <a class="toc-btn" href="#c17"><span class="num">17</span>Podcast 封面</a>
+          <a class="toc-btn" href="#c18"><span class="num">18</span>捐款頁 banner</a>
+          <a class="toc-btn" href="#c19"><span class="num">19</span>影響力資訊圖</a>
+          <a class="toc-btn" href="#c20"><span class="num">20</span>義賣商品照</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== Case 1 ========== -->
+    <article class="case" id="c1">
+      <div class="case-head">
+        <span class="case-num">CASE 1</span><span class="case-type">活動主視覺 · 印刷</span>
+        <h2>募款餐會主視覺</h2>
+        <p class="situation"><strong>情境：</strong>協會 20 週年募款餐會，要做主視覺給邀請函、邀請信、現場 KV 用。要傳達「典雅、信任、有歷史感」。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">優雅的長桌晚宴擺設，水晶杯、燭台、白色桌布</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">俯視 45 度鳥瞰、淺景深、桌面延伸到畫面深處</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">蠟燭燃燒中、燭光微微搖曳、空無一人</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">飯店宴會廳、暖色調水晶吊燈、深木色背景、有窗外都市夜景</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">米其林餐廳商業攝影、Vogue 雜誌精品感、金色與暗紅色調、極致質感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt（中文版）</span>
+          <button class="btn-copy" onclick="copyPrompt('p1')">複製</button>
+        </div>
+        <div class="prompt-box" id="p1">優雅的長桌晚宴擺設，水晶杯、銀製燭台、白色桌布、燭光搖曳，俯視 45 度鳥瞰構圖，淺景深，桌面延伸到畫面深處消失。場景在五星級飯店宴會廳，暖色調水晶吊燈灑下金色光線，深木色背景，遠處可見窗外都市夜景的點點燈火。米其林餐廳商業攝影風格、Vogue 雜誌精品感，金色與暗紅色調，極致質感，照片級真實感，高細節，8K 解析度。--ar 16:9</div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>English Version（Midjourney）</span>
+          <button class="btn-copy" onclick="copyPrompt('p1en')">複製</button>
+        </div>
+        <div class="prompt-box" id="p1en">Elegant long dining table setting, crystal glassware, silver candelabras, white tablecloth, flickering candlelight. 45-degree overhead composition, shallow depth of field, table extending into the depth. Five-star hotel ballroom, warm crystal chandelier lighting, deep wood background, city night view through the window. Michelin restaurant commercial photography, Vogue magazine luxury feel, gold and burgundy tones, photorealistic, highly detailed, 8K --ar 16:9</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>適合做邀請函封面、宴會 KV、企業募款專案首頁 banner。<strong>關鍵差異</strong>是「米其林餐廳商業攝影」這 8 個字——直接決定了質感天花板。</div>
+    </article>
+
+    <!-- ========== Case 2 ========== -->
+    <article class="case" id="c2">
+      <div class="case-head">
+        <span class="case-num">CASE 2</span><span class="case-type">招募海報 · 社群</span>
+        <h2>志工招募海報主視覺</h2>
+        <p class="situation"><strong>情境：</strong>協會招募 30 名假日陪伴志工，海報要貼社區公佈欄 + FB 廣告。目標族群：20-40 歲、想做有意義事情的人。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">3 位不同年齡、不同性別的志工（年輕女、中年男、退休女）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">中景群像、稍微仰角、3 人並肩</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">穿著志工背心、自然走在路上、互相說話微笑、其中一人回頭看鏡頭</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">台灣社區巷弄、紅磚牆、晨光、行道樹、有生活感</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">紀實感人像攝影、清新明亮、台灣街頭日常風格、暖色調膠片感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p2')">複製</button>
+        </div>
+        <div class="prompt-box" id="p2">3 位不同年齡層的台灣志工並肩走在路上：25 歲短髮女生、45 歲眼鏡男、60 歲銀髮短髮女，都穿著鮮黃色志工背心。中景群像、稍微仰角、3 人並肩，自然走著、互相說話、年輕女生回頭看鏡頭微笑。場景在台灣社區巷弄，紅磚牆、晨光從旁邊照進來、行道樹的綠葉、地上有自然光斑。紀實感人像攝影、清新明亮、台灣街頭日常風格、暖色調膠片感、富士底片色調、自然真實、不擺拍。--ar 3:4</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>3 個年齡層 = 直接告訴觀眾「任何人都歡迎」。<strong>「不擺拍」「自然」</strong>這幾個字避免出現假笑罐頭照。</div>
+    </article>
+
+    <!-- ========== Case 3 ========== -->
+    <article class="case" id="c3">
+      <div class="case-head">
+        <span class="case-num">CASE 3</span><span class="case-type">提案封面 · 商務</span>
+        <h2>ESG 企業合作提案封面</h2>
+        <p class="situation"><strong>情境：</strong>要去拜訪上市公司 ESG 部門提案，PDF 封面要傳達「夥伴關係、信任、專業」。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">兩雙手相握（一隻戴西裝袖扣、一隻穿著手工編織袖口）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">特寫、淺景深、手在畫面中央偏下</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">握手的瞬間、力道適中</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">辦公室窗景柔焦做背景、白色 + 淺木色調、自然光線</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">商業攝影、極簡、年報級質感、銀灰色與暖白色調</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p3')">複製</button>
+        </div>
+        <div class="prompt-box" id="p3">兩雙手相握的特寫鏡頭：一隻是穿著黑色西裝、配銀色袖扣的企業高管手；另一隻是穿著手工編織麻布袖口、皮膚有些風霜痕跡的工藝師手。特寫構圖、淺景深、手在畫面中央偏下、上方留出乾淨空間放標題。握手的瞬間、力道適中、傳達夥伴關係。場景在辦公室落地窗前柔焦做背景，可看到都市天際線、自然光從左側灑入。商業攝影、極簡風、企業年報級質感、銀灰色與暖白色調、高細節。--ar 4:3</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「西裝袖扣 vs 編織袖口」這個對比直接講出「企業 × 社企」的合作概念。上方留白讓你之後加標題文字。</div>
+    </article>
+
+    <!-- ========== Case 4 ========== -->
+    <article class="case" id="c4">
+      <div class="case-head">
+        <span class="case-num">CASE 4</span><span class="case-type">IG 故事 · 紀實</span>
+        <h2>受惠者故事 IG 照片</h2>
+        <p class="situation"><strong>情境：</strong>要寫一篇 IG 受惠者故事，需要一張不貼悲情標籤、但有溫度的照片。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一位 8 歲台灣女孩（避免可被識別的特徵）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">側面剪影、3:4 直式、人物在右側 1/3 位置</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">望向窗外、手裡握著彩色蠟筆、表情專注但平和</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">教室窗邊、自然光從窗外灑入、桌上有畫紙跟雜亂的蠟筆</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">紀錄片風格、柔和散景、不戲劇化、像 National Geographic 內頁</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p4')">複製</button>
+        </div>
+        <div class="prompt-box" id="p4">一位 8 歲的台灣女孩，從側面拍的剪影，望向窗外，手裡握著彩色蠟筆，表情專注但平和。3:4 直式構圖，人物在右側 1/3 位置，左側留白。場景在教室窗邊，柔和的自然光從窗外灑入、灑在她的側臉上，桌上有畫紙和散落的蠟筆。紀錄片攝影風格、柔和散景、不戲劇化、不悲情、像 National Geographic 雜誌內頁的人像、富士 Velvia 底片色調、有故事感。--ar 3:4</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「剪影」+「望向窗外」自帶故事感，不會讓服務對象變成可憐的「被拯救者」。<strong>「不戲劇化、不悲情」</strong>是關鍵。</div>
+    </article>
+
+    <!-- ========== Case 5 ========== -->
+    <article class="case" id="c5">
+      <div class="case-head">
+        <span class="case-num">CASE 5</span><span class="case-type">DM · 印刷品</span>
+        <h2>活動 DM 主視覺（家長講座）</h2>
+        <p class="situation"><strong>情境：</strong>「ADHD 家長講座」DM 要做正面主視覺，上半放標題、下半放圖。要溫暖、信任、不像衛教傳單。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一對亞洲母子（媽媽 35 歲、兒子 7 歲）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">人物在畫面下 1/3、上方留出大空間放標題、人物半身入鏡</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">媽媽蹲下平視孩子的眼睛、輕拍孩子肩膀、孩子微笑望向媽媽</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">客廳暖光、淺色木地板、背景柔焦、有一張兒童畫貼在牆上</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">日系生活攝影、清新自然、奶油色光線、雜誌親子刊物質感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p5')">複製</button>
+        </div>
+        <div class="prompt-box" id="p5">一對亞洲母子的溫馨互動：35 歲台灣媽媽蹲下平視 7 歲兒子的眼睛、輕拍他的肩膀、孩子微笑望向媽媽。人物在畫面下 1/3 位置、上方留出大量空間放標題文字、人物半身入鏡。場景在家中客廳，暖色調光線、淺色木地板、背景柔焦處理，牆上隱約可見一張兒童的塗鴉。日系生活攝影風格、清新自然、奶油色光線、像育兒雜誌《MUM》內頁、極致細節、寧靜祥和氛圍。--ar 4:5</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong><strong>「人物在下 1/3、上方留白」</strong>是 DM 設計關鍵——之後 Canva 加標題不會擋人臉。日系風讓家長感到放鬆。</div>
+    </article>
+
+    <!-- ========== Case 6 ========== -->
+    <article class="case" id="c6">
+      <div class="case-head">
+        <span class="case-num">CASE 6</span><span class="case-type">社群 · 手機優先</span>
+        <h2>LINE 群活動預告圖（直式）</h2>
+        <p class="situation"><strong>情境：</strong>要在 LINE 群發活動預告，需要直式手機看得清楚、滑過去就被吸住的圖。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一個大的圓形日曆圖示「9/14」+ 講座主題文字</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">9:16 直式、視覺中心點在中上、下方放 CTA</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">（靜態設計，無動作）</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">簡潔米白色背景、有手繪小植物點綴、淡淡的格紋紙感</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">扁平設計、文青手繪、品牌色青色+橘色點綴、字體圓潤友善</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p6')">複製</button>
+        </div>
+        <div class="prompt-box" id="p6">直式活動預告圖：畫面中上有一個大的青色圓形日曆圖示寫著「9/14 SAT 20:00」，下方放大字標題「ADHD 家長線上講座」，再下方一行副標「3 位專家陪你聊」。9:16 直式構圖，視覺集中在中上，下方有一個橘色按鈕寫「免費報名」。背景米白色帶有淡淡格紋紙感、邊角點綴 2-3 個手繪植物小圖案。扁平設計、文青手繪風格、品牌色青色 #00D4FF + 橘色 #FF6B35 點綴、字體圓潤友善、Bonjour Sans 風格。--ar 9:16</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>專為 LINE/IG 限動設計，手機螢幕看不擠。<strong>「字體圓潤友善」</strong>避免出現太正式的衛教感。</div>
+    </article>
+
+    <!-- ========== Case 7 ========== -->
+    <article class="case" id="c7">
+      <div class="case-head">
+        <span class="case-num">CASE 7</span><span class="case-type">年報 · 精品</span>
+        <h2>年報封面（20 週年特輯）</h2>
+        <p class="situation"><strong>情境：</strong>20 週年年報封面，要有「沉穩、歷史、精品」的感覺，給董事 + 大金主看。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">大型「20」字樣，由 20 條光線/絲線交織組成</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">字佔畫面 60%、置中、垂直延伸到上下</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">光線從中心向四周發散、線條優雅交織</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">深藍夜空底色、隱約有星空、底部有金色裝飾線條</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">愛馬仕年報、Tiffany 質感、燙金印刷感、極致精緻</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p7')">複製</button>
+        </div>
+        <div class="prompt-box" id="p7">年報封面設計：大型數字「20」字樣，由 20 條金色光線優雅交織組成，從中心向四周發散。數字佔畫面 60%、置中、垂直延伸到上下。深藍墨色夜空底色、隱約可見細微星光、底部有金色裝飾線條和小字「2025 ANNUAL REPORT」。愛馬仕年報、Tiffany & Co 質感、燙金印刷感、極致精緻、Art Deco 風格、留白優雅。--ar 3:4</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>放在 PDF 封面、印刷年報封面都適合。<strong>「20 條光線組成 20 字樣」</strong>是創意關鍵——AI 會自動串連兩層意義。</div>
+    </article>
+
+    <!-- ========== Case 8 ========== -->
+    <article class="case" id="c8">
+      <div class="case-head">
+        <span class="case-num">CASE 8</span><span class="case-type">短影音 · 首幀</span>
+        <h2>社群短影音首幀（吸睛問句）</h2>
+        <p class="situation"><strong>情境：</strong>IG Reels / TikTok 短片首幀，必須在 0.3 秒內讓人不滑掉。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一位疲憊的台灣媽媽 + 大字問句「你是不是也覺得？」</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">9:16 直式、人臉特寫佔下半、文字在上半</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">媽媽低頭撫額、表情疲憊、眼神向下</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">家中餐桌、暗色調、有寫到一半的作業本、孩子的玩具散落</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">電影感、冷色調、文字高對比（黃字白邊）、像 IG Reels 病毒短片</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p8')">複製</button>
+        </div>
+        <div class="prompt-box" id="p8">直式短影音首幀畫面：一位疲憊的 35 歲台灣媽媽特寫鏡頭，低頭、手撫額頭、眼神向下。畫面上半疊加大字「你是不是也覺得？」字體高對比黃字白邊。9:16 直式構圖，人臉在下半部、文字在上半。場景在家中餐桌前，暗色調光線、桌上有寫到一半的作業本、地上有孩子散落的玩具。電影感、冷色調、像 Netflix 紀錄片開場、IG Reels 病毒短片風格、有重量感、停頓感。--ar 9:16</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>用「問句 + 疲憊表情」勾起共鳴，讓 ADHD 家長停下滑動。<strong>「黃字白邊」</strong>是手機螢幕最高可讀的字色搭配。</div>
+    </article>
+
+    <!-- ========== Case 9 ========== -->
+    <article class="case" id="c9">
+      <div class="case-head">
+        <span class="case-num">CASE 9</span><span class="case-type">招生海報 · 教育</span>
+        <h2>課程招生海報</h2>
+        <p class="situation"><strong>情境：</strong>協會要開「家長親職教育課程」，需要海報傳達「專業可信、親切不嚴肅」。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">講師（40 歲女性、知性、穿針織衫）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">人物在右、左側留白、中景半身</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">手拿一本書、自然站姿、微笑看向鏡頭、不擺拍</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">教室背景、書架柔焦、自然光從左後方來、暖色調</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">TED 演講官方照片、知性、明亮乾淨、書店感、Apple Store 質感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p9')">複製</button>
+        </div>
+        <div class="prompt-box" id="p9">一位 40 歲的台灣女性講師形象照：知性的圓框眼鏡、穿著米色針織衫、長髮自然散落。中景半身、人物在畫面右側、左側留出大量空間放標題。手裡輕鬆拿著一本書、自然站姿、微笑看向鏡頭、不擺拍、像隨手抓拍。場景在現代化教室或書店，背景書架柔焦處理、自然光從左後方溫暖灑入。TED 演講官方照片風格、知性、明亮乾淨、像 Apple Store 講師形象照、暖色調。--ar 4:5</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「TED 演講官方照片」這個詞直接調出「專業但親近」的攝影風格。左側留白讓你貼課程資訊。</div>
+    </article>
+
+    <!-- ========== Case 10 ========== -->
+    <article class="case" id="c10">
+      <div class="case-head">
+        <span class="case-num">CASE 10</span><span class="case-type">電商 · 商品攝影</span>
+        <h2>手作商品攝影（琉璃項鍊）</h2>
+        <p class="situation"><strong>情境：</strong>馨工房琉璃項鍊要上電商平台，需要有「誠品商品照」的質感。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一條藍綠色琉璃珠串成的項鍊、有不規則紋理</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">俯視 90 度、商品擺成圓圈狀、佔畫面 50%、四周留白</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">（靜物無動作）</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">粗麻布背景、自然窗光從左側來、旁邊有 1-2 片乾燥葉子裝飾</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">誠品商品攝影、Pinkoi 質感、自然系、極簡留白、富士底片色</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p10')">複製</button>
+        </div>
+        <div class="prompt-box" id="p10">一條手工琉璃項鍊：藍綠色琉璃珠串成、每顆珠子大小不一、有不規則的天然紋理。俯視 90 度構圖、項鍊擺成自然垂落的圓圈狀、佔畫面 50%、四周大量留白。場景在粗麻布桌墊上、自然窗光從左側溫柔灑入、旁邊隨意擺著 1-2 片乾燥薄荷葉子做裝飾。誠品商品攝影、Pinkoi 設計師品牌質感、自然系、極簡留白、富士底片色調、無背景雜物、商業攝影級別。--ar 1:1</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>適合直接上 Pinkoi、誠品線上、IG 商品圖。<strong>「粗麻布 + 乾燥葉子」</strong>就是「公平貿易手作」的視覺密碼。</div>
+    </article>
+
+    <!-- ========== Case 11 ========== -->
+    <article class="case" id="c11">
+      <div class="case-head">
+        <span class="case-num">CASE 11</span><span class="case-type">形象照 · 專業</span>
+        <h2>講師/工作人員 LinkedIn 專業形象照</h2>
+        <p class="situation"><strong>情境：</strong>協會執行長要更新 LinkedIn 大頭照，要有國際感、專業但溫度。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">45 歲台灣男性執行長、短髮、穿深藍襯衫（無領帶）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">頭肩特寫、3/4 側身、視線略偏向側</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">自然站姿、微微抿嘴、眼神有自信但不嚴肅</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">辦公室書架柔焦背景、自然光從左前方來</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">LinkedIn 高階主管專業照、Forbes 雜誌人物攝影、自然不擺拍</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p11')">複製</button>
+        </div>
+        <div class="prompt-box" id="p11">45 歲台灣男性執行長的專業形象照：短髮、清爽鬍鬚、穿深藍色襯衫不打領帶。頭肩特寫、3/4 側身構圖、視線略偏向側不直視鏡頭、微微抿嘴、眼神有自信但不嚴肅。場景在現代辦公室、背景書架和大窗戶柔焦處理、自然光從左前方溫和灑入、有空氣感。LinkedIn 高階主管專業照、Forbes 雜誌人物攝影、自然不擺拍、像 Annie Leibovitz 拍商業領袖、暖白色調、80mm 鏡頭、淺景深。--ar 1:1</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong><strong>「視線略偏側、不擺拍」</strong>避免出現像證件照的呆板感。Annie Leibovitz 這個詞調出國際商業攝影感。</div>
+    </article>
+
+    <!-- ========== Case 12 ========== -->
+    <article class="case" id="c12">
+      <div class="case-head">
+        <span class="case-num">CASE 12</span><span class="case-type">IG 限動 · 體驗</span>
+        <h2>環教體驗 IG 限動</h2>
+        <p class="situation"><strong>情境：</strong>地方創生團體辦溪邊環教活動，要做 IG 限動素材吸引報名。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一隻手伸進清澈溪水中</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">9:16 直式、手在畫面中央、向下伸入水中</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">水面有手指撥動的漣漪、水波清晰</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">清澈山溪、底部圓石可見、四周綠葉、陽光穿透樹梢</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">Lonely Planet 雜誌、旅遊紀實、清新自然、有水珠細節、像 GoPro 拍攝</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p12')">複製</button>
+        </div>
+        <div class="prompt-box" id="p12">一隻手伸進清澈山溪水中的特寫畫面：手指撥動水面、產生清晰的同心圓漣漪、水波細節清晰可見。9:16 直式構圖、手在畫面中央偏上、向下伸入水中。場景在台灣山區清澈溪流、底部圓石看得一清二楚、四周是青翠綠葉、陽光穿透樹梢形成光斑灑在水面。Lonely Planet 雜誌風格、旅遊紀實攝影、清新自然、水珠四濺的瞬間、像 GoPro Hero 拍攝、超高細節、藍綠色水色、療癒感。--ar 9:16</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>適合 IG 限動或 Reels 封面。「水珠四濺」「Lonely Planet」是調出「體驗感、療癒感」的關鍵。</div>
+    </article>
+
+    <!-- ========== Case 13 ========== -->
+    <article class="case" id="c13">
+      <div class="case-head">
+        <span class="case-num">CASE 13</span><span class="case-type">禮盒 · 包裝視覺</span>
+        <h2>原民手作禮盒包裝視覺</h2>
+        <p class="situation"><strong>情境：</strong>馨工房琉璃禮盒，要設計禮盒包裝視覺給企業 ESG 採購用。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">深色實木禮盒打開、裡面整齊放著琉璃飾品</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">俯視 30 度、禮盒佔畫面 60%、有層次感</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">禮盒蓋子半開、可見內部、有絨布襯墊</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">深色原木桌、旁邊放原民編織布料一角、暖色聚光</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">精品禮盒攝影、Tiffany & Co 質感、文化感、有故事的精品</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p13')">複製</button>
+        </div>
+        <div class="prompt-box" id="p13">深色實木禮盒半開：盒蓋打開 60 度、裡面放著 3 件手工琉璃飾品（項鍊+耳環+手鍊），整齊排在黑色絲絨襯墊上。俯視 30 度構圖、禮盒佔畫面 60%、有層次和深度感。場景在深色原木桌上、左下角隱約可見原民編織布料的一角做點綴、暖色聚光燈從上方打下強調禮盒中心。精品禮盒攝影、Tiffany & Co 包裝質感、有文化感的精品、暗調背景、極致細節、像高級訂製品拍攝。--ar 4:3</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「Tiffany & Co 質感」+「原民編織」=「國際精品 × 文化深度」雙重視覺。給企業 CSR 採購窗口的最佳第一印象。</div>
+    </article>
+
+    <!-- ========== Case 14 ========== -->
+    <article class="case" id="c14">
+      <div class="case-head">
+        <span class="case-num">CASE 14</span><span class="case-type">感謝信 · 情感</span>
+        <h2>捐款人感謝信封面圖</h2>
+        <p class="situation"><strong>情境：</strong>年度捐款人感謝信要用 EDM 寄出，封面需要有「真誠、手感、溫暖」。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一封手寫信、信紙微微泛黃、旁邊放一束乾燥小花</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">俯視 90 度、信件佔畫面 60%、自然散落擺放</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">（靜物）信紙半開、墨水鋼筆放在旁邊</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">淺木色書桌、暖光從右上來、有溫暖的陰影</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">Instagram 文青風、手感攝影、自然光、Kinfolk 雜誌感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p14')">複製</button>
+        </div>
+        <div class="prompt-box" id="p14">一封手寫信攤開在桌上：信紙微微泛黃、可見隱約的手寫黑色墨水字跡、上方放一束小巧的乾燥滿天星花束、墨水鋼筆斜放在信旁。俯視 90 度構圖、信件佔畫面 60%、自然散落擺放、不刻意對齊。場景在淺色橡木書桌上、溫暖陽光從右上方斜射進來、有溫暖的長陰影。Instagram 文青風格、手感生活攝影、自然光、Kinfolk 雜誌質感、極致細節、有 grain 顆粒感、復古色調。--ar 16:9</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>讓捐款人 EDM 一開信就感受到「這是個有溫度的協會」。<strong>「Kinfolk 雜誌感」</strong>是「文青質感」的精準描述。</div>
+    </article>
+
+    <!-- ========== Case 15 ========== -->
+    <article class="case" id="c15">
+      <div class="case-head">
+        <span class="case-num">CASE 15</span><span class="case-type">資訊圖 · 對比</span>
+        <h2>SDGs 影響力對比圖（before/after）</h2>
+        <p class="situation"><strong>情境：</strong>要做一張視覺對比圖呈現「沒有我們協會 vs 有我們協會」，放年報或簡報用。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">左右並列兩個場景：左側灰暗、右側明亮</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">16:9 橫式、左右對稱、中間有細線分隔</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">左：孤獨人物背影；右：群體互助微笑</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">左側陰天、空曠；右側陽光、有植物</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">編輯設計插畫、扁平風、品牌色點綴、像 NPR 視覺報導</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p15')">複製</button>
+        </div>
+        <div class="prompt-box" id="p15">左右對比視覺圖：16:9 橫式構圖、中央有一條細的金色直線分隔。左半部「BEFORE」：陰天、灰藍色調、空曠街道、一位孤獨的人物背影坐在長椅上、低頭。右半部「AFTER」：明亮陽光、淡綠色調、同一個街道但有植物和陽光、3-4 個人物群體互動、其中一人在微笑。場景背景一致但氛圍截然不同。編輯設計插畫風格、扁平向量插畫、品牌色青色和橘色點綴、像 NPR 視覺新聞報導、有對比張力。--ar 16:9</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>適合 SDGs 報告、年報、社群懶人包。對比結構讓「我們的價值」一目了然，不用文字解釋。</div>
+    </article>
+
+    <!-- ========== Case 16 ========== -->
+    <article class="case" id="c16">
+      <div class="case-head">
+        <span class="case-num">CASE 16</span><span class="case-type">社區 · 文宣</span>
+        <h2>社區活動文宣（長輩共學）</h2>
+        <p class="situation"><strong>情境：</strong>社區活動中心要辦長輩共學活動，文宣要有溫馨、在地、不年輕的調性。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">3 位 65-75 歲台灣阿公阿嬤一起做手工藝</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">中景群像、稍微俯視、桌面為前景</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">手在做編織、互相聊天笑、有人戴老花眼鏡</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">社區活動中心、米白色牆、暖光、桌上有竹編材料</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">紀實人像攝影、溫馨在地、台灣社區美感、有歲月感、富士底片</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p16')">複製</button>
+        </div>
+        <div class="prompt-box" id="p16">3 位 65-75 歲台灣阿公阿嬤一起做竹編手工藝：兩位阿嬤、一位阿公、其中一人戴老花眼鏡、滿臉皺紋和歲月痕跡。中景群像、稍微俯視構圖、桌面竹編材料為前景。手在認真編織、彼此聊天微笑、自然不擺拍。場景在社區活動中心、米白色牆面、暖光從窗外灑入、桌上散著竹編材料和成品、旁邊一杯熱茶。紀實人像攝影、溫馨在地、台灣社區美感、有歲月感、富士底片色調、像獨立紀錄片劇照。--ar 4:3</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「滿臉皺紋」「有歲月感」打破「老人 = 慈祥模糊」的刻板印象，呈現真實的長輩。在地感強。</div>
+    </article>
+
+    <!-- ========== Case 17 ========== -->
+    <article class="case" id="c17">
+      <div class="case-head">
+        <span class="case-num">CASE 17</span><span class="case-type">Podcast · 1:1</span>
+        <h2>Podcast 封面設計</h2>
+        <p class="situation"><strong>情境：</strong>協會要做 Podcast 節目「家長日記」，要有強烈識別度的封面（正方形）。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">節目名稱「家長日記」+ 1 個視覺主圖（咖啡杯 + 筆記本）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">1:1 正方形、文字佔上半、圖佔下半</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">（靜態設計）</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">米黃色背景、有手寫質感的紙紋</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">當代極簡設計、襯線字體厚重、像 Spotify Top Charts 封面、品牌色橘+米</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p17')">複製</button>
+        </div>
+        <div class="prompt-box" id="p17">Podcast 封面正方形設計 1:1：上半放大字標題「家長日記」用厚重襯線字體（如 Playfair Display）、字色深咖啡色。下半放一個極簡的咖啡杯圖示 + 一本翻開的筆記本疊放、有手繪輪廓質感。背景米黃色帶有溫暖紙紋。底部小字節目副標「給每天都在掙扎的爸媽」。當代極簡設計、像 Spotify Top Charts 封面、品牌色橘 #FF6B35 + 米色點綴、有手寫質感邊框、扁平向量風格。--ar 1:1</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「厚重襯線字體」+「極簡圖示」是當代 Podcast 封面公式。在 Spotify/Apple Podcast 縮圖也清楚可辨。</div>
+    </article>
+
+    <!-- ========== Case 18 ========== -->
+    <article class="case" id="c18">
+      <div class="case-head">
+        <span class="case-num">CASE 18</span><span class="case-type">Banner · 募款</span>
+        <h2>募款捐贈頁面 banner</h2>
+        <p class="situation"><strong>情境：</strong>捐款頁面頂部 banner，要在 3 秒內讓人有「我想捐」的感覺。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">一個孩子的純真笑容特寫（不正面、半側面）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">16:9 橫式、人臉在左 1/3、右 2/3 留白</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">微笑、眼睛望向遠方、自然不對著鏡頭</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">柔焦的綠色背景、自然光柔和、有 bokeh 光斑</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">公益廣告攝影、Save the Children 質感、暖色調、有希望感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p18')">複製</button>
+        </div>
+        <div class="prompt-box" id="p18">一個 8 歲台灣孩子的半側面笑容特寫：自然微笑、眼睛望向遠方、不對著鏡頭、頭髮有點凌亂、自然真實。16:9 橫式構圖、人臉在畫面左 1/3 位置、右 2/3 留白給標題文字。場景：柔焦的綠色樹葉背景、自然陽光柔和灑下、有溫暖的 bokeh 光斑、像在公園自然抓拍。公益廣告攝影風格、Save the Children 國際組織質感、暖色調、有希望感、不悲情、像紀錄片溫暖瞬間、富士底片。--ar 21:9</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong><strong>「不正對鏡頭、望向遠方」</strong>避免悲情感，反而傳達「未來感、希望感」。右側留白方便加 CTA 按鈕「立即捐款」。</div>
+    </article>
+
+    <!-- ========== Case 19 ========== -->
+    <article class="case" id="c19">
+      <div class="case-head">
+        <span class="case-num">CASE 19</span><span class="case-type">資訊圖表 · 數據</span>
+        <h2>影響力數據視覺化</h2>
+        <p class="situation"><strong>情境：</strong>要做一張「年度影響力數據」單張圖，貼 IG / 印刷年報摘要用。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">大字數字「6,243」+ 副標「位家庭得到支持」</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">數字佔畫面 50%、置中、字大到爆</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">（靜態）</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">純色品牌底色（深青色）、底部有圖示元素點綴</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">infographic 設計、極簡有力、Pentagram 設計公司風格、字體 Inter Black</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p19')">複製</button>
+        </div>
+        <div class="prompt-box" id="p19">資訊圖表設計：中央放超大白色數字「6,243」字體用 Inter Black 極粗體、佔畫面 50%、置中。數字下方一行白色細字副標「位家庭得到支持」。底部右下角有 3 個簡單的線條圖示（小手、心、家屋）做點綴。整體在深青色純色背景 #0A1628 上。極簡 infographic 設計、Pentagram 設計公司風格、極簡有力、現代主義、留白優雅、適合社群分享。--ar 1:1</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「Pentagram 設計公司風格」直接調出國際頂級 infographic 美學。一張圖講完一年成效。</div>
+    </article>
+
+    <!-- ========== Case 20 ========== -->
+    <article class="case" id="c20">
+      <div class="case-head">
+        <span class="case-num">CASE 20</span><span class="case-type">電商 · 義賣</span>
+        <h2>義賣手作商品照（手工香皂）</h2>
+        <p class="situation"><strong>情境：</strong>庇護工場手工香皂要上 Pinkoi 義賣，需要有「手感、自然、可信」的商品照。</p>
+      </div>
+      <div class="build-steps">
+        <div class="build-step s1"><span class="bs-label">1 主體</span><span class="bs-text">3 塊不同顏色的手工香皂（米色、淡綠、淡粉）</span></div>
+        <div class="build-step s2"><span class="bs-label">2 構圖</span><span class="bs-text">俯視 90 度、香皂排成三角構圖、留白多</span></div>
+        <div class="build-step s3"><span class="bs-label">3 動作</span><span class="bs-text">（靜物）每塊香皂有不規則手切邊</span></div>
+        <div class="build-step s4"><span class="bs-label">4 場景</span><span class="bs-text">淺色原木桌、旁邊有乾燥薰衣草、柔和窗光</span></div>
+        <div class="build-step s5"><span class="bs-label">5 風格</span><span class="bs-text">手感商品攝影、自然系電商、像 LUSH 商品照、Aesop 質感</span></div>
+      </div>
+      <div class="final-block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>最終完整 Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt('p20')">複製</button>
+        </div>
+        <div class="prompt-box" id="p20">3 塊手工香皂的商品攝影：分別是米色（燕麥）、淡綠色（薄荷）、淡粉色（玫瑰），每塊都有不規則的手切邊和自然紋理。俯視 90 度構圖、3 塊香皂排成自然三角形、四周大量留白。場景在淺色橡木桌上、旁邊隨意擺一小束乾燥薰衣草、柔和窗光從左後方灑入、有溫暖陰影。手感商品攝影、自然系電商風格、像 LUSH 商品照、Aesop 品牌質感、極致細節、可看到手工切割的痕跡、有溫度感。--ar 1:1</div>
+      </div>
+      <div class="result-block"><strong>預期成果：</strong>「手切邊」「Aesop 質感」是讓「義賣」變成「精品」的關鍵詞。直接可上 Pinkoi、誠品、IG 商品圖。</div>
+    </article>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Autolab · AI峰哥 · <a href="https://www.autolab.cloud" target="_blank">autolab.cloud</a></span>
+      <span>20 案例 · 主體×構圖×動作×場景×風格 · 免費永久使用</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function copyPrompt(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Prompt 已複製，可貼到 AI 生圖工具');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ Prompt 已複製');
+      });
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+  </script>
+
+</body>
+</html>
