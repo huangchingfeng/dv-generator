@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mermaid 圖表生成器｜把 AI 給的代碼變成圖</title>
+  <meta name="description" content="貼上 AI（Claude/Gemini/ChatGPT）給你的 Mermaid 代碼，即時看到圓餅圖、流程圖、心智圖、甘特圖、長條圖。可下載 SVG/PNG。免費永久使用。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --cyan: #00D4FF;
+      --cyan-dark: #0099BB;
+      --cyan-10: rgba(0, 212, 255, 0.10);
+      --orange: #FF6B35;
+      --orange-10: rgba(255, 107, 53, 0.10);
+      --green-dark: #198F3F;
+      --green-10: rgba(52, 199, 89, 0.10);
+      --purple: #AF52DE;
+      --purple-10: rgba(175, 82, 222, 0.10);
+      --yellow: #FF9F0A;
+      --yellow-10: rgba(255, 159, 10, 0.10);
+      --red: #FF3B30;
+      --red-10: rgba(255, 59, 48, 0.08);
+      --white: #FFFFFF;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --card-2: #FAFAFA;
+      --border: #E5E5EA;
+      --border-strong: #D1D1D6;
+      --title: #1C1C1E;
+      --body: #2C2C2E;
+      --muted: #636366;
+      --secondary: #8E8E93;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --code-bg: #1C1C1E;
+      --code-fg: #E5E5EA;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan-dark); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1240px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Header */
+    header { padding: 28px 0 18px; background: var(--white); border-bottom: 1px solid var(--border); }
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .eyebrow {
+      display: inline-block;
+      color: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--cyan-10);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+    h1 { color: var(--title); font-size: 28px; line-height: 1.2; margin: 10px 0 6px; font-weight: 900; letter-spacing: -0.5px; }
+    .lead { max-width: 720px; font-size: 14.5px; color: var(--muted); margin: 0; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--title);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .back-link:hover { background: var(--cyan-10); border-color: var(--cyan); text-decoration: none; }
+
+    /* Sample chips */
+    .samples {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .samples-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      overflow-x: auto;
+    }
+    .samples-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .sample-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--card-2);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      color: var(--body);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .sample-chip:hover {
+      background: var(--cyan-10);
+      border-color: var(--cyan-dark);
+      color: var(--cyan-dark);
+    }
+
+    /* Main layout */
+    main { padding: 24px 0 60px; }
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      min-height: 600px;
+    }
+
+    .pane {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pane-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: var(--card-2);
+    }
+    .pane-title { color: var(--title); font-weight: 800; font-size: 14.5px; }
+    .pane-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-sm {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border-strong);
+      background: var(--white);
+      color: var(--title);
+      transition: all 0.15s;
+    }
+    .btn-sm:hover { border-color: var(--cyan-dark); color: var(--cyan-dark); }
+    .btn-sm.primary { background: var(--cyan-dark); color: white; border-color: var(--cyan-dark); }
+    .btn-sm.primary:hover { background: #007a99; color: white; }
+    .btn-sm.orange { background: var(--orange); color: white; border-color: var(--orange); }
+    .btn-sm.orange:hover { background: #e85a23; color: white; }
+
+    /* Code editor */
+    #codeInput {
+      flex: 1;
+      width: 100%;
+      padding: 18px 20px;
+      border: none;
+      background: var(--code-bg);
+      color: var(--code-fg);
+      font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.65;
+      resize: none;
+      outline: none;
+      tab-size: 2;
+    }
+
+    /* Preview pane */
+    #preview {
+      flex: 1;
+      padding: 24px;
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+    }
+    #preview svg { max-width: 100%; height: auto; }
+    .preview-placeholder { color: var(--secondary); font-size: 14px; text-align: center; }
+
+    /* Error */
+    .error-box {
+      display: none;
+      padding: 14px 20px;
+      background: var(--red-10);
+      border-top: 2px solid var(--red);
+      color: var(--red);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      white-space: pre-wrap;
+    }
+    .error-box.show { display: block; }
+    .error-box strong { font-weight: 800; }
+
+    /* Tips */
+    .tips {
+      margin-top: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 26px;
+      box-shadow: var(--shadow);
+    }
+    .tips h3 { color: var(--title); font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+    .tips ol { padding-left: 22px; }
+    .tips li { font-size: 14px; color: var(--body); margin: 6px 0; }
+    .tips li strong { color: var(--cyan-dark); }
+    .tips kbd {
+      background: var(--card-2);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      padding: 1px 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--title);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--title);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    footer {
+      padding: 24px 0;
+      color: var(--secondary);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      h1 { font-size: 22px; }
+      .editor-grid { grid-template-columns: 1fr; min-height: auto; }
+      .pane { min-height: 360px; }
+      .header-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <div class="header-row">
+        <div>
+          <span class="eyebrow">AUTOLAB · Mermaid 圖表生成器</span>
+          <h1>把 AI 給的 Mermaid 代碼變成圖表</h1>
+          <p class="lead">貼上 Claude / Gemini / ChatGPT 給你的 Mermaid 代碼 → 即時看到圓餅圖、流程圖、心智圖、甘特圖、長條圖。可下載 SVG（給設計師）或 PNG（直接用）。</p>
+        </div>
+        <a class="back-link" href="index.html">← 回 DV 生成器</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="samples">
+    <div class="wrap">
+      <div class="samples-row">
+        <span class="samples-label">📚 範例（按一下載入）：</span>
+        <button class="sample-chip" onclick="loadSample('pie')">🥧 圓餅圖｜經費結構</button>
+        <button class="sample-chip" onclick="loadSample('flowchart')">🔀 流程圖｜服務流程</button>
+        <button class="sample-chip" onclick="loadSample('mindmap')">🧠 心智圖｜服務範圍</button>
+        <button class="sample-chip" onclick="loadSample('gantt')">📅 甘特圖｜年度時程</button>
+        <button class="sample-chip" onclick="loadSample('sequence')">🔄 時序圖｜個案介入</button>
+        <button class="sample-chip" onclick="loadSample('bar')">📊 長條圖｜3 年成長</button>
+        <button class="sample-chip" onclick="loadSample('quadrant')">🎯 矩陣圖｜受眾優先</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="editor-grid">
+
+      <!-- Left: Code Input -->
+      <div class="pane">
+        <div class="pane-head">
+          <div class="pane-title">💻 Mermaid 代碼</div>
+          <div class="pane-actions">
+            <button class="btn-sm" onclick="copyCode()">📋 複製</button>
+            <button class="btn-sm" onclick="clearCode()">🗑 清空</button>
+          </div>
+        </div>
+        <textarea id="codeInput" spellcheck="false" placeholder="貼上 AI 給你的 Mermaid 代碼，或按上方範例載入..."></textarea>
+        <div class="error-box" id="errorBox"></div>
+      </div>
+
+      <!-- Right: Preview -->
+      <div class="pane">
+        <div class="pane-head">
+          <div class="pane-title">🖼 圖表預覽</div>
+          <div class="pane-actions">
+            <button class="btn-sm primary" onclick="downloadSVG()">⬇ SVG</button>
+            <button class="btn-sm orange" onclick="downloadPNG()">⬇ PNG</button>
+          </div>
+        </div>
+        <div id="preview">
+          <div class="preview-placeholder">⬅ 在左邊輸入代碼<br>或上方選一個範例</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tips -->
+    <div class="tips">
+      <h3>📖 使用教學</h3>
+      <ol>
+        <li>在 <strong>Claude / Gemini / ChatGPT</strong> 跑你的 DV，AI 會給你 Mermaid 代碼（通常用 ```mermaid 包起來）</li>
+        <li>把代碼<strong>內容部分複製</strong>（不要包含「```mermaid」這幾個字）</li>
+        <li>貼到左邊代碼框 → 右邊會<strong>即時顯示圖表</strong></li>
+        <li>不滿意 → 直接<strong>改文字</strong>（例如圓餅圖數字、流程圖順序），圖會即時更新</li>
+        <li>滿意了 → 按 <kbd>⬇ SVG</kbd>（給設計師編輯用）或 <kbd>⬇ PNG</kbd>（直接貼到簡報/文件）</li>
+      </ol>
+      <p style="margin-top:14px; color:var(--muted); font-size:13px;">
+        💡 <strong>小技巧：</strong>如果代碼跑不出來，看下方紅色錯誤訊息，把錯誤行貼回 Claude 說「這行有語法錯誤幫我修」，AI 會幫你 debug。
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    Autolab · AI峰哥 · <a href="https://www.autolab.cloud" target="_blank">autolab.cloud</a> · 免費永久使用
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // 初始化 Mermaid
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#0099BB',
+        primaryTextColor: '#1C1C1E',
+        primaryBorderColor: '#0099BB',
+        lineColor: '#636366',
+        fontFamily: '"Noto Sans TC", "Inter", sans-serif',
+        fontSize: '14px'
+      },
+      flowchart: { useMaxWidth: true, htmlLabels: true },
+      sequence: { useMaxWidth: true },
+      gantt: { useMaxWidth: true },
+      pie: { useMaxWidth: true }
+    });
+
+    // 範例樣板
+    const SAMPLES = {
+      pie: `pie title 經費來源結構
+    "政府補助" : 35
+    "企業捐款" : 30
+    "個人捐款" : 25
+    "自營收入" : 10`,
+
+      flowchart: `flowchart LR
+    A[新個案進入] --> B[初步評估]
+    B --> C{是否符合服務}
+    C -->|是| D[擬定服務計畫]
+    C -->|否| E[轉介其他單位]
+    D --> F[執行服務]
+    F --> G[定期追蹤]
+    G --> H[結案歸檔]
+
+    style A fill:#0099BB,color:#fff
+    style H fill:#198F3F,color:#fff
+    style E fill:#FF9F0A,color:#fff`,
+
+      mindmap: `mindmap
+  root((我的協會<br/>服務範圍))
+    早療
+      0-3 歲早期療育
+      3-6 歲學前療育
+      家長親職教育
+    就業
+      庇護工場
+      職前訓練
+      就業媒合
+    倡議
+      政策遊說
+      社會教育
+      媒體溝通
+    研究
+      個案統計
+      國際對標
+      影響力評估`,
+
+      gantt: `gantt
+    title 2026 年活動時程
+    dateFormat YYYY-MM
+    section Q1
+    募款活動籌備     :a1, 2026-01, 2M
+    section Q2
+    志工招募         :b1, 2026-03, 1M
+    年度成果展       :b2, 2026-05, 1M
+    section Q3
+    暑期服務營隊     :c1, 2026-07, 2M
+    section Q4
+    年度報告產出     :d1, 2026-10, 2M
+    募款餐會         :d2, 2026-12, 1M`,
+
+      sequence: `sequenceDiagram
+    participant 家屬
+    participant 社工
+    participant 早療師
+    participant 行政
+
+    家屬->>社工: 來電求助
+    社工->>家屬: 初步訪談（30 分鐘）
+    社工->>早療師: 個案轉介
+    早療師->>家屬: 安排初評
+    早療師->>行政: 建檔
+    Note over 早療師,家屬: 6 週療育介入
+    早療師-->>社工: 進度回報
+    社工-->>家屬: 定期追蹤
+    家屬-->>社工: 滿意度回饋`,
+
+      bar: `xychart-beta
+    title "3 年服務人次成長"
+    x-axis [2023, 2024, 2025]
+    y-axis "服務人次" 0 --> 8000
+    bar [4200, 5800, 6243]
+    line [4200, 5800, 6243]`,
+
+      quadrant: `quadrantChart
+    title 受眾優先矩陣
+    x-axis 低影響 --> 高影響
+    y-axis 低成本 --> 高成本
+    quadrant-1 高成本 高影響
+    quadrant-2 高成本 低影響
+    quadrant-3 低成本 低影響
+    quadrant-4 低成本 高影響
+    企業 CSR 窗口: [0.80, 0.55]
+    捐款人: [0.65, 0.30]
+    志工招募: [0.45, 0.20]
+    政府單位: [0.75, 0.50]
+    社區居民: [0.35, 0.15]`
+    };
+
+    // DOM refs
+    const codeInput = document.getElementById('codeInput');
+    const preview = document.getElementById('preview');
+    const errorBox = document.getElementById('errorBox');
+
+    // 防抖渲染
+    let renderTimer = null;
+    let renderCounter = 0;
+    function scheduleRender() {
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(() => render(codeInput.value), 350);
+    }
+
+    async function render(code) {
+      const trimmed = (code || '').trim();
+      if (!trimmed) {
+        preview.innerHTML = '<div class="preview-placeholder">⬅ 在左邊輸入代碼<br>或上方選一個範例</div>';
+        errorBox.classList.remove('show');
+        return;
+      }
+      try {
+        renderCounter++;
+        const id = 'mermaid-graph-' + renderCounter;
+        const { svg } = await mermaid.render(id, trimmed);
+        preview.innerHTML = svg;
+        errorBox.classList.remove('show');
+        errorBox.textContent = '';
+      } catch (e) {
+        const msg = (e && e.message) ? e.message : String(e);
+        // 清掉 mermaid 自己注入到 body 的錯誤 div
+        document.querySelectorAll('[id^="dmermaid-graph-"]').forEach(el => el.remove());
+        errorBox.innerHTML = '<strong>⚠ 語法錯誤：</strong>\n' + escapeHtml(msg);
+        errorBox.classList.add('show');
+      }
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // 載入範例
+    function loadSample(name) {
+      if (codeInput.value.trim() && !confirm('要替換目前的代碼嗎？')) return;
+      codeInput.value = SAMPLES[name] || '';
+      saveState();
+      render(codeInput.value);
+    }
+
+    // 清空
+    function clearCode() {
+      if (!codeInput.value.trim()) return;
+      if (!confirm('確定清空代碼？')) return;
+      codeInput.value = '';
+      saveState();
+      render('');
+    }
+
+    // 複製代碼
+    function copyCode() {
+      const text = codeInput.value;
+      if (!text.trim()) { showToast('沒有代碼可複製'); return; }
+      navigator.clipboard.writeText(text).then(() => showToast('✓ 代碼已複製'));
+    }
+
+    // 下載 SVG
+    function downloadSVG() {
+      const svg = preview.querySelector('svg');
+      if (!svg) { showToast('還沒有圖表可下載'); return; }
+      const clone = svg.cloneNode(true);
+      // 確保有 xmlns
+      clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      const serializer = new XMLSerializer();
+      const svgStr = serializer.serializeToString(clone);
+      const blob = new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n' + svgStr], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mermaid-chart-${Date.now()}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('✓ SVG 已下載');
+    }
+
+    // 下載 PNG（2x 高解析）
+    async function downloadPNG() {
+      const svg = preview.querySelector('svg');
+      if (!svg) { showToast('還沒有圖表可下載'); return; }
+      try {
+        const clone = svg.cloneNode(true);
+        clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        // 取 viewBox 尺寸
+        const rect = svg.getBoundingClientRect();
+        let w = rect.width, h = rect.height;
+        if (!w || !h) {
+          const vb = svg.getAttribute('viewBox');
+          if (vb) {
+            const parts = vb.split(/\s+/).map(Number);
+            w = parts[2]; h = parts[3];
+          } else {
+            w = 800; h = 600;
+          }
+        }
+        clone.setAttribute('width', w);
+        clone.setAttribute('height', h);
+        const svgStr = new XMLSerializer().serializeToString(clone);
+        const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = url;
+        });
+        const scale = 2;
+        const canvas = document.createElement('canvas');
+        canvas.width = w * scale;
+        canvas.height = h * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        canvas.toBlob((pngBlob) => {
+          if (!pngBlob) { showToast('PNG 轉換失敗'); return; }
+          const pngUrl = URL.createObjectURL(pngBlob);
+          const a = document.createElement('a');
+          a.href = pngUrl;
+          a.download = `mermaid-chart-${Date.now()}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(pngUrl);
+          showToast('✓ PNG 已下載（2x 高解析）');
+        }, 'image/png');
+      } catch (e) {
+        showToast('PNG 下載失敗：' + (e && e.message ? e.message : e));
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // localStorage 自動存
+    const STORAGE_KEY = 'mermaid_code_v1';
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, codeInput.value); } catch(e) {}
+    }
+    function loadState() {
+      try {
+        const v = localStorage.getItem(STORAGE_KEY);
+        if (v) codeInput.value = v;
+      } catch(e) {}
+    }
+
+    codeInput.addEventListener('input', () => {
+      saveState();
+      scheduleRender();
+    });
+
+    // Init
+    loadState();
+    if (!codeInput.value.trim()) {
+      // 預設載一個流程圖當示範
+      codeInput.value = SAMPLES.flowchart;
+      saveState();
+    }
+    render(codeInput.value);
+  </script>
+
+</body>
+</html>
