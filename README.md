@@ -1,32 +1,30 @@
-# 社會創新工具組
+# 社會企業 AI 工具組
 
-社會企業 / 社創組織一站式 AI 工具包。
+給社福協會、基金會、合作社、地方創生團體的一站式 AI 工具包。
 
-**🌐 線上使用**：
-- **[DV 價值展示生成器](https://huangchingfeng.github.io/dv-generator/)** — 12 引導問題填表單產 AI Prompt（內部對齊→對外溝通）
-- **[SBMC 商業畫布生成器](https://huangchingfeng.github.io/dv-generator/sbmc.html)** — 13 格畫布即時編輯，下載 PNG / AI 優化 Prompt
-- **[Mermaid 圖表生成器](https://huangchingfeng.github.io/dv-generator/mermaid.html)** — 貼 AI 代碼變圖（圓餅/流程/心智/甘特/長條/矩陣圖）
-- **[Claude 跑出來的成果範例](https://docs.google.com/document/d/16hDd_0eoMWWbnqtxps_ytrSW8bTXaSkpOqSFJNhMjMk/edit?usp=sharing)** — 繭裹子完整 DV 草稿示範（Google Docs）
+**🌐 線上使用**：https://huangchingfeng.github.io/dv-generator/
 
-填表單 → 自動產生 Claude / Gemini 完整提示詞 → 貼到 AI 一鍵生成你的 DV 草稿 → AI 給的 Mermaid 代碼貼到圖表生成器直接出圖。
+## 4 個工具
 
-## 為誰做的
+| 工具 | 連結 | 用途 |
+|------|------|------|
+| 🎯 **DV 價值展示生成器** | [dv.html](https://huangchingfeng.github.io/dv-generator/dv.html) | 12 引導問題填表單產 AI Prompt（內部對齊→對外溝通） |
+| 🎨 **SBMC 商業畫布生成器** | [sbmc.html](https://huangchingfeng.github.io/dv-generator/sbmc.html) | 13 格畫布即時編輯，下載 PNG / Excel / AI 畫畫布 |
+| 📊 **Mermaid 圖表生成器** | [mermaid.html](https://huangchingfeng.github.io/dv-generator/mermaid.html) | 貼 AI 代碼變圖（圓餅/流程/心智/甘特/長條/矩陣）|
+| 📚 **實用提示詞 10 案例** | [prompts.html](https://huangchingfeng.github.io/dv-generator/prompts.html) | 志工招募、活動文案、問卷、人物誌、短影音⋯⋯一鍵複製給 Claude |
 
-- 社福協會、基金會、合作社、庇護工場、地方創生團體
-- 需要對外溝通價值的社會企業/社創組織
-- 上完阿峰老師「社創組織 AI 基礎實作」課程的學員
+## 工作流推薦（3 步驟）
+
+1. **SBMC 想清楚** — 用 [SBMC 畫布](https://huangchingfeng.github.io/dv-generator/sbmc.html) 把組織盤點一遍
+2. **DV 寫出來** — 用 [DV 生成器](https://huangchingfeng.github.io/dv-generator/dv.html) 寫成對外溝通的文件
+3. **Mermaid 變成圖** — AI 給的圖表代碼貼到 [Mermaid 生成器](https://huangchingfeng.github.io/dv-generator/mermaid.html)，下載 PNG/SVG
 
 ## 特色
 
-- **5 步驟引導**：受眾選擇 → 溝通目的 → 12 引導問題 → 7 類資料盤點 → 產出 Prompt
-- **角色 × 情境 × 期望** 結構自動組合
-- **localStorage 自動儲存**：填一半關瀏覽器，回來資料還在
-- **免註冊免上傳**：資料只存在你瀏覽器，永久免費
-- 純前端 HTML，無後端依賴
-
-## 教學脈絡
-
-依據勞動部「社會企業展現價值工具手冊」設計，原版來自加拿大 [Demonstrating Value](https://www.demonstratingvalue.org/) 框架。
+- **純前端**：免註冊、免上傳、永久免費
+- **資料隱私**：所有資料只存在你的瀏覽器（localStorage）
+- **AI 工具搭配**：主推 Claude（長提示詞理解最好），Gemini Canvas / ChatGPT 也可
+- **中文化**：全程繁體中文、台灣用語
 
 ## 製作
 

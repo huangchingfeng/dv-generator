@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>實用提示詞 10 案例｜社會企業 AI 應用範本</title>
+  <meta name="description" content="社會企業 / 社創組織 AI 應用 10 大實用案例：志工招募、活動文案、滿意度問卷、捐款人感謝信、人物誌、短影音腳本、提案摘要、服務流程圖、客服 FAQ、影響力故事。Prompt 一鍵複製給 Claude / Gemini / ChatGPT。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00D4FF;
+      --cyan-dark: #0099BB;
+      --cyan-10: rgba(0, 212, 255, 0.10);
+      --orange: #FF6B35;
+      --orange-10: rgba(255, 107, 53, 0.10);
+      --green-dark: #198F3F;
+      --green-10: rgba(52, 199, 89, 0.10);
+      --purple: #AF52DE;
+      --purple-10: rgba(175, 82, 222, 0.10);
+      --yellow: #FF9F0A;
+      --yellow-10: rgba(255, 159, 10, 0.10);
+      --white: #FFFFFF;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --card-2: #FAFAFA;
+      --border: #E5E5EA;
+      --border-strong: #D1D1D6;
+      --title: #1C1C1E;
+      --body: #2C2C2E;
+      --muted: #636366;
+      --secondary: #8E8E93;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --code-bg: #1C1C1E;
+      --code-fg: #E5E5EA;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan-dark); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(960px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Header */
+    header { padding: 32px 0 18px; background: var(--white); border-bottom: 1px solid var(--border); }
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .eyebrow {
+      display: inline-block; color: var(--cyan-dark); font-size: 11px; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase; background: var(--cyan-10);
+      padding: 6px 12px; border-radius: 6px;
+    }
+    h1 { color: var(--title); font-size: 30px; line-height: 1.2; margin: 12px 0 6px; font-weight: 900; letter-spacing: -0.5px; }
+    .lead { max-width: 720px; font-size: 15px; color: var(--muted); margin: 0; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--title); font-size: 13px; font-weight: 700; white-space: nowrap;
+    }
+    .back-link:hover { background: var(--cyan-10); border-color: var(--cyan); text-decoration: none; }
+
+    /* Sticky TOC */
+    .toc-nav { position: sticky; top: 0; z-index: 50; background: var(--white); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+    .toc-inner { display: flex; gap: 6px; padding: 12px 0; flex-wrap: wrap; overflow-x: auto; }
+    .toc-btn {
+      padding: 7px 12px; background: var(--card-2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--title); font-weight: 700; font-size: 12.5px; white-space: nowrap;
+    }
+    .toc-btn:hover { background: var(--cyan-10); border-color: var(--cyan); text-decoration: none; }
+    .toc-btn .num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 9px; background: var(--cyan-dark);
+      color: white; font-size: 10px; font-weight: 800; margin-right: 4px;
+    }
+
+    main { padding: 32px 0 80px; }
+
+    /* Case Card */
+    .case {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 70px;
+    }
+    .case-head { margin-bottom: 16px; padding-bottom: 14px; border-bottom: 2px dashed var(--border); }
+    .case-num {
+      display: inline-block; padding: 4px 10px;
+      background: var(--cyan-dark); color: white;
+      border-radius: 6px; font-size: 11px; font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .case h2 { color: var(--title); font-size: 22px; font-weight: 900; margin: 8px 0 8px; letter-spacing: -0.2px; }
+    .situation { color: var(--muted); font-size: 14px; margin: 0; }
+    .situation strong { color: var(--title); font-weight: 700; }
+
+    /* Block */
+    .block { margin-top: 18px; }
+    .block-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .block-title {
+      color: var(--title); font-size: 14px; font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .block-title .icon { margin-right: 4px; }
+    .btn-copy {
+      padding: 6px 12px; background: var(--cyan-dark); color: white;
+      border: none; border-radius: 6px; font-family: inherit;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-copy:hover { background: #007a99; }
+
+    .prompt-box {
+      background: var(--code-bg); color: var(--code-fg);
+      border-radius: 10px; padding: 18px 20px;
+      font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 13px; line-height: 1.7;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 500px; overflow-y: auto;
+    }
+    .prompt-box::-webkit-scrollbar { width: 8px; }
+    .prompt-box::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+    .result-box {
+      background: var(--green-10);
+      border-left: 4px solid var(--green-dark);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.78;
+    }
+    .result-box strong { color: var(--green-dark); font-weight: 800; }
+    .result-box .sample-tag {
+      display: inline-block;
+      background: var(--green-dark); color: white;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 800; margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+    .result-box p { margin: 8px 0; }
+    .result-box ul { margin: 8px 0; padding-left: 22px; }
+    .result-box li { margin: 4px 0; }
+
+    /* Action row at bottom of each case */
+    .case-actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-claude {
+      padding: 8px 14px; background: var(--orange); color: white;
+      border: none; border-radius: 6px; font-family: inherit;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-claude:hover { background: #e85a23; color: white; text-decoration: none; }
+
+    /* Intro */
+    .intro {
+      background: linear-gradient(135deg, var(--cyan-10), var(--orange-10));
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      font-size: 14.5px;
+      color: var(--title);
+    }
+    .intro strong { color: var(--cyan-dark); font-weight: 800; }
+    .intro code {
+      background: var(--card); padding: 1px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      color: var(--orange); font-weight: 700;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: var(--title); color: white; padding: 12px 24px;
+      border-radius: 8px; font-weight: 700; font-size: 14px;
+      z-index: 1000; box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    footer {
+      padding: 28px 0; background: var(--white);
+      border-top: 1px solid var(--border); color: var(--secondary); font-size: 13px;
+    }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 700px) {
+      h1 { font-size: 22px; }
+      .case { padding: 20px 22px; }
+      .case h2 { font-size: 18px; }
+      .header-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <div class="header-row">
+        <div>
+          <span class="eyebrow">AUTOLAB · 實用提示詞 10 案例</span>
+          <h1>社會企業 AI 應用｜10 個明天就能用的提示詞</h1>
+          <p class="lead">每個案例都套用「角色 × 情境 × 期望」結構。一鍵複製 → 貼到 Claude / Gemini / ChatGPT → AI 直接給你成品。</p>
+        </div>
+        <a class="back-link" href="index.html">← 回首頁</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="toc-nav">
+    <div class="wrap">
+      <div class="toc-inner">
+        <a class="toc-btn" href="#case-1"><span class="num">1</span>活動命名與標語</a>
+        <a class="toc-btn" href="#case-2"><span class="num">2</span>志工招募貼文</a>
+        <a class="toc-btn" href="#case-3"><span class="num">3</span>服務對象人物誌</a>
+        <a class="toc-btn" href="#case-4"><span class="num">4</span>活動滿意度問卷</a>
+        <a class="toc-btn" href="#case-5"><span class="num">5</span>捐款人感謝信</a>
+        <a class="toc-btn" href="#case-6"><span class="num">6</span>社群短影音腳本</a>
+        <a class="toc-btn" href="#case-7"><span class="num">7</span>一頁式提案摘要</a>
+        <a class="toc-btn" href="#case-8"><span class="num">8</span>服務流程圖</a>
+        <a class="toc-btn" href="#case-9"><span class="num">9</span>常見問答小幫手</a>
+        <a class="toc-btn" href="#case-10"><span class="num">10</span>影響力故事改寫</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+
+    <div class="intro">
+      <strong>📖 怎麼用：</strong>每個案例都有 <code>📋 複製 Prompt</code> 按鈕，按下去複製整段提示詞 → 開 Claude / Gemini / ChatGPT → 貼上去按 Enter → AI 給你完整成品。
+      <br>把 Prompt 中 <code>[xxx]</code> 的部分換成你自己的組織資料，AI 會更精準。
+    </div>
+
+    <!-- ============ Case 1 ============ -->
+    <article class="case" id="case-1">
+      <div class="case-head">
+        <span class="case-num">CASE 1</span>
+        <h2>🎨 活動命名與標語</h2>
+        <p class="situation"><strong>情境：</strong>協會要辦年度募款活動，需要朗朗上口的名字 + 主標語。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(1)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-1"># 角色
+資深公益活動命名創意總監，10 年 NPO 品牌操盤經驗。
+
+# 情境
+我是 [協會名] 行政人員，10 月要辦年度募款餐會，目標募 200 萬。
+主軸：協會成立 20 週年、回顧 + 展望、邀請企業 CSR 窗口。
+過去活動名字都是「XX 協會 20 週年募款餐會」太正式、缺乏記憶點。
+
+# 期望
+請給我：
+1. 活動主名稱 5 個候選（每個 8 字內、易記、有畫面感）
+2. 每個主名稱搭配 1 句副標語（25 字內）
+3. 1 個 hashtag（#OOOO 形式）
+4. 命名邏輯說明（讓我跟董事會解釋為什麼這個好）
+
+語氣：不灑狗血、有故事感、企業也不會覺得奇怪
+禁用詞：賦能、底層邏輯、顆粒度</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>主名稱：</strong>「我們走過的 20 年」<br>
+          <strong>副標：</strong>「下一個 20 年，邀請你成為其中一段路」<br>
+          <strong>Hashtag：</strong>#一起走20<br>
+          <strong>邏輯：</strong>「走過」回顧、「邀請你」帶出企業參與感，避開「再造輝煌」的陳腔濫調。</p>
+        </div>
+      </div>
+      <div class="case-actions">
+        <a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a>
+      </div>
+    </article>
+
+    <!-- ============ Case 2 ============ -->
+    <article class="case" id="case-2">
+      <div class="case-head">
+        <span class="case-num">CASE 2</span>
+        <h2>🙋 志工招募貼文</h2>
+        <p class="situation"><strong>情境：</strong>協會要招募「家長支持志工」30 名，過去寫的招募文太正經，年輕家長不敢來。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(2)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-2"># 角色
+你是擅長公益志工招募的社群行銷顧問，10 年 NPO 經驗，操作過急難救助、長照、兒少類 15+ 個志工專案。
+
+# 情境
+我是 [協會名] 專案管理人。協會要招募「家長支持志工」30 名，
+協助：① 新加入家長的引路人 ② 講座協助 ③ 家長社團小編。
+- 時間彈性，每月 4-8 小時
+- 地點：北中南都有
+- 對象：曾照顧過 [服務對象] 的家長最佳
+- 廣告預算只有 5 千，主力靠協會 FB + LINE 家長群轉發
+- 痛點：過去寫的招募文都太正經，年輕家長覺得「我自己都顧不好還能當志工？」
+
+# 期望
+請一次給我以下 4 項：
+1. FB 招募長文 600 字（含真實感故事鉤子 → 你能做什麼 → 報名方式）
+2. LINE/FB 短版 200 字
+3. 海報主視覺文案（主標 15 字、副標 25 字、3 個亮點、行動句 1 句）
+4. 給「猶豫的人」FAQ 5 題（每題答 50 字）
+
+語氣：不悲情、有行動感、不情緒勒索
+禁用詞：獻愛心、伸出援手、付出就是收穫、賦能</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>FB 長文開頭：</strong>「3 年前 Jane 帶 7 歲的兒子第一次走進我們的諮商室，她紅著眼睛問：『我是不是太糟糕的媽媽？』今天她坐在你旁邊，要對另一個新進的家長說同一句話：『我也走過這條路。』我們在找 30 位這樣的家長——你的孩子已經長大了，你願意陪一段別的家長走......」</p>
+          <p><strong>海報主標：</strong>「你走過的路，可以變成她的光」<br>
+          <strong>3 亮點：</strong>① 不用是專家 ② 時間彈性 ③ 我們陪你一起學<br>
+          <strong>CTA：</strong>「報名連結在留言處，下週三晚上 8 點線上說明會見」</p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 3 ============ -->
+    <article class="case" id="case-3">
+      <div class="case-head">
+        <span class="case-num">CASE 3</span>
+        <h2>👤 服務對象人物誌</h2>
+        <p class="situation"><strong>情境：</strong>要做 ESG 提案時，企業窗口看不懂「我們服務的人是誰」。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(3)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-3"># 角色
+資深 UX 研究員 + NPO 服務設計顧問，擅長把服務對象變成「具體一個人」。
+
+# 情境
+我們協會服務 [服務對象描述]，1000+ 人，但對外講都是「弱勢家庭」太籠統。
+下週要跟 [企業名稱] ESG 提案，需要一份「典型服務對象人物誌」讓對方秒懂。
+
+# 期望
+請我設計 2-3 個「典型受惠者人物誌」（Persona），每個含：
+1. 代稱 + 一段外觀描述（年齡、職業、家庭、外型）
+2. 一句話自我介紹
+3. 典型一週時程（早上做什麼、痛點在哪）
+4. 與我們協會的接觸點（什麼時候、為什麼、得到什麼）
+5. 「沒有我們會怎樣 vs 有我們」對比
+
+語氣：寫得像紀錄片旁白，有畫面、不悲情、不貼標籤
+禁用詞：弱勢、低端、可憐、無助</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>Jane，37 歲，行政專員</strong><br>
+          「我以前覺得我兒子在故意氣我，直到他 6 歲被確診 ADHD。」</p>
+          <p><strong>典型一天：</strong>早上 7 點戰鬥送孩子上學 / 中午公司打電話「您小孩又打人了」 / 晚上 11 點哭著查 google。</p>
+          <p><strong>接觸點：</strong>兒子 7 歲時加入我們的家長支持團體 → 第 6 個月開始能跟先生討論而不吵架。</p>
+          <p><strong>沒我們：</strong>可能離婚、辭職；<strong>有我們：</strong>保住工作、夫妻關係修復、孩子情緒穩定。</p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 4 ============ -->
+    <article class="case" id="case-4">
+      <div class="case-head">
+        <span class="case-num">CASE 4</span>
+        <h2>📋 活動滿意度問卷</h2>
+        <p class="situation"><strong>情境：</strong>剛辦完家長講座，下週要寄問卷給 60 位家長，但過去回收率只有 30%。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(4)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-4"># 角色
+你是擅長 NPO 活動成效評估的問卷設計師，10 年經驗，熟悉量化+質化混合題型。
+
+# 情境
+我剛辦完「[活動主題]」，[人數] 位參加，下週要寄問卷給他們。
+活動內容：[X 位講師、X 小時、有/無交流時段]。
+- 目的 1：評估這次活動成效（寫進今年度成果報告）
+- 目的 2：找出下次可以怎麼改
+- 目的 3：找出有意願深度合作 / 加入支持團體的對象
+- 我會用 Google Form 發送
+- 過去問卷回收率只有 30%，題目太多家長不想填
+
+# 期望
+請一次給我：
+1. 完整問卷草稿，共 10 題以內（含 4 種題型：選擇題、評分題、開放題、勾選題）
+2. 每題標註：題型 / 設計用意 / 對應目的 1/2/3
+3. 問卷開頭歡迎詞 100 字內（讓家長願意填）
+4. 問卷結尾 CTA（引導有意願的家長留下聯絡方式）
+5. 填完後的「自動分析方式」建議：哪些題目可量化？哪些要人工讀？
+
+回收率優化原則：
+- 總填寫時間控制在 3 分鐘內
+- 前 3 題最簡單（拉低門檻）
+- 重要的開放題放第 4-5 題</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>典型 10 題結構：</strong></p>
+          <ul>
+            <li>Q1 整體滿意度（1-5 分）— 評分 / 目的 1</li>
+            <li>Q2 最有收穫的環節 — 單選 / 目的 1+2</li>
+            <li>Q3 講師講授風格（3 位講師矩陣評分）— 評分 / 目的 2</li>
+            <li>Q4 <strong>「這場講座解決了我什麼問題？」</strong>— 開放題 / 目的 1</li>
+            <li>Q5 <strong>「最想學但這次沒教到的主題？」</strong>— 開放題 / 目的 2</li>
+            <li>Q6 下次活動形式偏好 — 勾選 / 目的 2</li>
+            <li>Q7 <strong>願意進階參與？</strong>— 勾選 / 目的 3</li>
+            <li>Q8 NPS 推薦分數（1-10）— 評分 / 目的 1</li>
+            <li>Q9 對協會的整體建議 — 開放 / 目的 2</li>
+            <li>Q10 若願意進一步聊聊，請留 LINE/Email — 目的 3</li>
+          </ul>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 5 ============ -->
+    <article class="case" id="case-5">
+      <div class="case-head">
+        <span class="case-num">CASE 5</span>
+        <h2>💌 捐款人感謝信</h2>
+        <p class="situation"><strong>情境：</strong>年底要寄感謝信給 500 位捐款人，內容要個人化但不能寫 500 封。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(5)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-5"># 角色
+擅長 NPO 捐款人關係維護的文案，10 年募款顧問經驗，熟悉「個人化群發」技巧。
+
+# 情境
+我們協會今年收到 500 筆捐款，金額從 500 到 50 萬不等。
+要寄一份年度感謝信，但用「親愛的捐款人」太冷漠、寫 500 封又不可能。
+我打算分 3 個級距發信：
+- 500-5,000 元（小額：300 人）
+- 5,001-50,000 元（中額：150 人）
+- 50,001+（大額：50 人）
+
+# 期望
+請我設計 3 個版本感謝信，每封 400 字內：
+1. 開場 1 句：點出對方捐了什麼級距（但不寫具體金額，用故事帶）
+2. 中段 1 個具體成果故事（同一個故事但根據級距改深度）
+3. 結尾：明年的計畫 + CTA（小額 = 邀請再捐、中額 = 邀請參訪、大額 = 邀請董事級會面）
+
+每封信留 [姓名]、[捐款用途] 兩個變數讓我用 mail merge 寄出
+語氣：感謝但不卑微，平視不仰望
+禁用詞：感激涕零、深表謝意、慷慨解囊</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>中額版開頭：</strong>「您今年的支持，讓我們可以在新竹多開一個家長支持團體。具體一點說——上週六，第一場團體有 12 位媽媽到場，其中 4 位是您支持時新加入的會員。」</p>
+          <p><strong>中額版 CTA：</strong>「想看看我們的服務現場嗎？11 月有一場新竹工坊開放日，邀請您來坐坐、跟 4 位媽媽聊一下她們的故事。回信告訴我們方便的時間，我們安排接送。」</p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 6 ============ -->
+    <article class="case" id="case-6">
+      <div class="case-head">
+        <span class="case-num">CASE 6</span>
+        <h2>🎬 社群短影音腳本</h2>
+        <p class="situation"><strong>情境：</strong>下週六晚上要辦線上講座，目標衝到 100 人報名，要拍 IG/FB Reels 預告。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(6)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-6"># 角色
+你是社群短影音腳本編劇，3 年 IG/TikTok/Reels 操盤經驗，特別擅長 NPO 議題（不灑狗血、有行動感）。
+
+# 情境
+我是 [協會名] 專案管理人，下週六晚上要辦「[講座主題]」線上講座，
+免費，目標衝到 100 人報名。
+- 平台：IG Reels + FB Reels（直式）
+- 主推給：[目標族群描述]
+- 講師：[講師 1] + [講師 2] + [講師 3]
+- 報名連結會放 IG 簡介
+
+# 期望
+請給我 2 個版本短影音腳本：
+版本 A：30 秒（短而精，給 IG）
+版本 B：60 秒（多一點深度，給 FB）
+
+每個腳本含 4 欄表格：
+| 秒數 | 畫面（具體鏡頭）| 字幕（手機螢幕看得清楚的字數）| 旁白/音樂 |
+
+腳本要求：
+- 前 3 秒必須有「鉤子」（讓人不滑掉）
+- 結尾 5 秒明確 CTA（點 IG 簡介連結報名）
+- 字幕每段不超過 12 字（手機螢幕剛好）
+- 不要用煽情音樂，建議輕快或溫暖
+- 旁白語氣：像朋友聊天，不像衛教
+
+最後附：3 組 IG 文案 caption（含 hashtag）給我貼到貼文</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>30 秒版開頭（0-3 秒）：</strong></p>
+          <p>畫面｜家長疲憊低頭看孩子寫作業<br>
+          字幕｜<strong>「你是不是也覺得 / 自己快撐不住了？」</strong><br>
+          旁白｜（無，靜默+滴答聲）</p>
+          <p><strong>結尾（25-30 秒）：</strong></p>
+          <p>畫面｜螢幕大字 + QR code<br>
+          字幕｜<strong>報名連結在 IG 簡介 / 9/14 晚上 8 點</strong><br>
+          旁白｜「赤子心線上講座，這週六見。」</p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 7 ============ -->
+    <article class="case" id="case-7">
+      <div class="case-head">
+        <span class="case-num">CASE 7</span>
+        <h2>📄 一頁式提案摘要</h2>
+        <p class="situation"><strong>情境：</strong>要去拜訪企業 CSR 窗口，對方只給 15 分鐘、要一頁 A4 提案。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(7)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-7"># 角色
+資深 B2B 企業合作提案顧問，10 年面對上市公司 CSR / ESG 部門經驗。
+
+# 情境
+我們協會明年想跟 [企業名稱] 合作「[合作主題]」。
+下週要去拜訪對方 ESG 部副理，她只給 15 分鐘、要一頁 A4 提案。
+
+# 期望
+請設計一頁式 A4 提案結構：
+1. 頂部一行 logo + 「合作主題」+ 「為什麼是 [企業]」（30 字）
+2. 中段 3 段：
+   - 我們是誰（3 個關鍵數字）
+   - 提案內容（活動 1 場、目標 X 人、時程）
+   - 對企業的價值（3 個寫進永續報告書的點 + 1 個媒體曝光點）
+3. 底部：合作模式 3 案比較表（基礎 / 標準 / 旗艦）+ 報價區間
+4. 右下角：QR Code + 我的聯絡方式
+
+語氣：商務但溫度、數字導向、不堆形容詞
+禁用詞：賦能、底層邏輯、賦予能量</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>提案主標：</strong>「在你的辦公室種一棵理解的樹｜為富邦 200 位家長員工辦的 ADHD 體驗日」</p>
+          <p><strong>3 段內容：</strong></p>
+          <ul>
+            <li>我們是誰：服務 6000+ 家庭、年辦 87 場講座、合作 12 家上市公司</li>
+            <li>提案內容：1 場 / 200 人 / 4 小時 / 富邦大樓</li>
+            <li>對你的價值：寫進永續報告 SDG 3+4+10、媒體曝光 5+ 篇、員工 NPS +20</li>
+          </ul>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 8 ============ -->
+    <article class="case" id="case-8">
+      <div class="case-head">
+        <span class="case-num">CASE 8</span>
+        <h2>🔀 服務流程圖</h2>
+        <p class="situation"><strong>情境：</strong>政府補助案要求附「服務流程圖」、協會自己畫太醜。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(8)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-8"># 角色
+擅長服務設計流程視覺化的顧問，會用 Mermaid 程式碼產出可即時渲染的流程圖。
+
+# 情境
+我們協會的「[服務名稱]」過去是 PowerPoint 手畫，
+評審說「看不懂、分支不清楚、缺漏 SOP 細節」。
+下個月要交 [補助單位] 補助案，需要一張清楚的流程圖。
+
+服務流程概述：
+- [步驟 1] → [步驟 2] → [步驟 3] → ...
+- 某些步驟可能轉介出去
+- 某些步驟可能多次循環
+- 結案後 X 個月內可重啟
+
+# 期望
+請給我：
+1. Mermaid 流程圖代碼（flowchart 格式、含分支與循環）
+2. 每個節點旁邊標註「負責人 + 時程」（如：社工 / 3 個工作天）
+3. 一段 200 字的流程文字說明（給政府補助案用）
+4. 視覺化建議：哪些節點該強調？哪些是 SOP 關鍵點？
+
+備註：Mermaid 代碼貼到 https://huangchingfeng.github.io/dv-generator/mermaid.html 可即時看圖</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE - Mermaid 代碼</span>
+          <pre style="background:#1C1C1E;color:#E5E5EA;padding:12px;border-radius:6px;font-family:monospace;font-size:12px;overflow-x:auto;">flowchart TD
+    A[家屬來電] --&gt; B[初步篩選 / 社工 3 天]
+    B --&gt;|符合| C[初評 / 心理師 5 天]
+    B --&gt;|不符合| Z[轉介其他單位]
+    C --&gt; D[擬定服務計畫 / 7 天]
+    D --&gt; E[執行服務]
+    E --&gt; F{是否需延長}
+    F --&gt;|是| E
+    F --&gt;|否| G[追蹤 6 個月]
+    G --&gt; H[結案]
+    H -.可再啟動.-&gt; A</pre>
+          <p><strong>使用：</strong>貼到 <a href="mermaid.html" target="_blank">Mermaid 圖表生成器</a> 即時看圖、下載 PNG。</p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 9 ============ -->
+    <article class="case" id="case-9">
+      <div class="case-head">
+        <span class="case-num">CASE 9</span>
+        <h2>💬 常見問答小幫手</h2>
+        <p class="situation"><strong>情境：</strong>協會 LINE 客服每天回同樣 30 個問題、做不完。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(9)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-9"># 角色
+擅長 NPO 客服自動化的內容設計師，熟悉 LINE OA / Chatbot 內容規劃。
+
+# 情境
+我們協會 LINE 帳號每天收到 50+ 私訊，80% 都是同樣問題：
+- 課程資訊
+- 報名流程
+- 個案諮詢預約
+- 捐款方式
+- 志工招募
+我自己回到手軟、又怕漏掉個案急事。
+
+我手上有：過去 3 個月的訊息截圖 100+ 則（已去識別化）。
+
+[在此貼上你的訊息範本]
+
+# 期望
+請幫我設計：
+1. FAQ 庫：從訊息中萃取 20 個最常見問題（每題答案 80 字內）
+2. 分類：分成「課程 / 諮詢 / 捐款 / 志工 / 其他」5 大類
+3. 語氣模板：「親切版」「正式版」「緊急版」3 種（依問題嚴重度切換）
+4. 無法回答時的轉接話術（個案急事 → 接給社工的橋接句）
+5. 持續學習機制建議：之後新訊息怎麼補進 FAQ？
+
+語氣：像協會志工小編，不像冷冰冰機器人
+禁用詞：賦能、底層邏輯</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE</span>
+          <p><strong>Q3（諮詢類）：</strong>「我兒子最近被學校老師說是過動兒，我該帶他去看醫生嗎？」</p>
+          <p><strong>A（親切版）：</strong>「謝謝您願意問我們🙏 老師的觀察是一個重要訊號，但確診需要兒童心智科醫師評估。我們協會的【北/中/南】合作院所名單在這裡：[連結]。若您想先聊聊，可預約我們的家長一對一諮詢（免費）：[連結]」</p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+    <!-- ============ Case 10 ============ -->
+    <article class="case" id="case-10">
+      <div class="case-head">
+        <span class="case-num">CASE 10</span>
+        <h2>📖 影響力故事改寫</h2>
+        <p class="situation"><strong>情境：</strong>個案故事原稿太流水帳、寫不出讓人想分享的版本。</p>
+      </div>
+      <div class="block">
+        <div class="block-head">
+          <span class="block-title"><span class="icon">📋</span>Prompt</span>
+          <button class="btn-copy" onclick="copyPrompt(10)">複製 Prompt</button>
+        </div>
+        <div class="prompt-box" id="prompt-10"># 角色
+資深紀實故事編劇 + 公益議題媒體編輯，曾在《報導者》《天下永續》操刀 NPO 專題。
+
+# 情境
+我們協會的社工寫了一份個案紀錄：
+[在這裡貼上原始紀錄 500-1000 字]
+
+問題是：
+- 流水帳、像病歷
+- 看不到「轉變」
+- 沒有畫面感
+- 結尾沒有讓人想行動的點
+
+我要把這個故事用在：① 年報 ② 募款餐會口頭分享 ③ 社群貼文
+
+# 期望
+請改寫成 3 個版本：
+1. 年報版（800 字）：完整起承轉合、含 3 個關鍵時間點、結尾連到 SDGs
+2. 募款餐會口頭版（200 字）：適合 90 秒講完、有情緒鉤子、結尾 CTA
+3. 社群貼文版（150 字）：前 2 句必須抓住停留、含 hashtag
+
+每個版本都遵守：
+- 主角名稱用代稱（小宇、阿芳）
+- 不揭露個資（學校、地址、家庭細節去識別）
+- 「困境 → 轉折 → 成果」結構清楚
+- 不貼悲情標籤、不寫成被拯救者
+- 結尾「行動連結」明確（捐款 / 報名 / 分享）
+- 禁用：「翻轉」「重生」「找回希望」這類陳腔濫調</div>
+      </div>
+      <div class="block">
+        <div class="block-head"><span class="block-title"><span class="icon">✨</span>AI 成果範例</span></div>
+        <div class="result-box">
+          <span class="sample-tag">SAMPLE - 社群貼文版</span>
+          <p>「小宇 7 歲那年，第一次自己投出地板滾球。</p>
+          <p>在那之前的 3 年，他不會說話、不敢看陌生人、害怕『出去玩』這 3 個字。</p>
+          <p>上週六他媽媽傳訊息給我們，照片裡小宇在公園盪鞦韆，笑得像個 7 歲該有的樣子。</p>
+          <p>——這就是我們做的事。如果你想讓更多孩子像小宇一樣：[捐款連結]</p>
+          <p><strong>#早療 #ADHD #心路基金會 #我陪你長大</strong></p>
+        </div>
+      </div>
+      <div class="case-actions"><a class="btn-claude" href="https://claude.ai/new" target="_blank">🚀 開啟 Claude 貼上</a></div>
+    </article>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Autolab · AI峰哥 · <a href="https://www.autolab.cloud" target="_blank">autolab.cloud</a></span>
+      <span>10 案例 · 角色×情境×期望 · 免費永久使用</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function copyPrompt(num) {
+      const el = document.getElementById('prompt-' + num);
+      if (!el) return;
+      const text = el.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ 案例 ' + num + ' Prompt 已複製，可貼到 Claude 了');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ Prompt 已複製');
+      });
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+  </script>
+
+</body>
+</html>

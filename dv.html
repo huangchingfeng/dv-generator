@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DV 價值展示生成器｜社會企業用 AI 說自己的故事</title>
+  <meta name="description" content="社會企業價值展示（Demonstrating Value）一鍵 prompt 產生器。填表單 → 產出 Claude / Gemini 完整提示詞 → 貼到 AI 出 DV 草稿。免費永久使用。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00D4FF;
+      --cyan-dark: #0099BB;
+      --cyan-10: rgba(0, 212, 255, 0.10);
+      --orange: #FF6B35;
+      --orange-10: rgba(255, 107, 53, 0.10);
+      --green-dark: #198F3F;
+      --green-10: rgba(52, 199, 89, 0.10);
+      --yellow: #FF9F0A;
+      --yellow-10: rgba(255, 159, 10, 0.10);
+      --white: #FFFFFF;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --card-2: #FAFAFA;
+      --border: #E5E5EA;
+      --border-strong: #D1D1D6;
+      --title: #1C1C1E;
+      --body: #2C2C2E;
+      --muted: #636366;
+      --secondary: #8E8E93;
+      --shadow: 0 2px 12px rgba(0,0,0,0.04);
+      --shadow-hover: 0 6px 24px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan-dark); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(960px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Header */
+    header { padding: 32px 0 20px; background: var(--white); border-bottom: 1px solid var(--border); }
+    .eyebrow {
+      display: inline-block;
+      color: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--cyan-10);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+    h1 { color: var(--title); font-size: 32px; line-height: 1.2; margin: 10px 0 6px; font-weight: 900; letter-spacing: -0.5px; }
+    .lead { max-width: 720px; font-size: 15px; color: var(--muted); margin: 0; }
+
+    /* Progress */
+    .progress-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .progress-inner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 0;
+      overflow-x: auto;
+    }
+    .progress-step {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .progress-step:hover { border-color: var(--cyan); }
+    .progress-step.active {
+      background: var(--cyan-dark);
+      color: white;
+      border-color: var(--cyan-dark);
+    }
+    .progress-step.done {
+      background: var(--green-10);
+      color: var(--green-dark);
+      border-color: rgba(52, 199, 89, 0.3);
+    }
+    .progress-step .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.3);
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .progress-step.active .num { background: rgba(255,255,255,0.3); }
+    .progress-step.done .num { background: var(--green-dark); color: white; }
+
+    /* Step section */
+    main { padding: 30px 0 80px; }
+    .step-section { display: none; }
+    .step-section.active { display: block; }
+    .step-header { margin-bottom: 24px; }
+    .step-eyebrow { color: var(--cyan-dark); font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    .step-title { color: var(--title); font-size: 26px; font-weight: 900; margin: 6px 0 4px; letter-spacing: -0.2px; }
+    .step-desc { color: var(--muted); font-size: 14px; }
+
+    /* Form */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 26px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label {
+      display: block;
+      color: var(--title);
+      font-weight: 800;
+      font-size: 14.5px;
+      margin-bottom: 4px;
+    }
+    .field-label .req { color: var(--orange); margin-left: 4px; }
+    .field-hint {
+      color: var(--muted);
+      font-size: 12.5px;
+      margin-bottom: 8px;
+      line-height: 1.55;
+    }
+    .field-hint .em { color: var(--cyan-dark); font-weight: 700; }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14.5px;
+      color: var(--body);
+      background: var(--white);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--cyan-dark);
+      box-shadow: 0 0 0 3px var(--cyan-10);
+    }
+    textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+    textarea.large { min-height: 120px; }
+
+    /* Checkboxes / Radio */
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .option-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: var(--card-2);
+      border: 1.5px solid var(--border);
+      color: var(--body);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .option-chip:hover { border-color: var(--cyan); }
+    .option-chip input { display: none; }
+    .option-chip.checked {
+      background: var(--cyan-10);
+      border-color: var(--cyan-dark);
+      color: var(--cyan-dark);
+      font-weight: 800;
+    }
+
+    /* Sub-question */
+    .sub-q {
+      background: var(--card-2);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .sub-q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--cyan-10);
+      color: var(--cyan-dark);
+      font-weight: 900;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s;
+      border: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--cyan-dark); color: white; }
+    .btn-primary:hover { background: #007a99; box-shadow: var(--shadow-hover); }
+    .btn-secondary { background: var(--card); color: var(--title); border: 1.5px solid var(--border-strong); }
+    .btn-secondary:hover { border-color: var(--cyan-dark); color: var(--cyan-dark); }
+    .btn-ghost { background: transparent; color: var(--muted); padding: 12px 12px; }
+    .btn-ghost:hover { color: var(--title); }
+    .btn-orange { background: var(--orange); color: white; }
+    .btn-orange:hover { background: #e85a23; }
+
+    /* Output */
+    .output-box {
+      background: var(--title);
+      color: #E5E5EA;
+      border-radius: 10px;
+      padding: 22px 26px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 13.5px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      max-height: 540px;
+      overflow-y: auto;
+      margin-top: 14px;
+    }
+    .output-box::-webkit-scrollbar { width: 8px; }
+    .output-box::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .action-row .btn { flex: 0 0 auto; }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--title);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    /* Callouts */
+    .callout {
+      background: var(--yellow-10);
+      border-left: 4px solid var(--yellow);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+      color: var(--title);
+    }
+    .callout strong { color: #B86E00; font-weight: 800; }
+    .callout-blue { background: var(--cyan-10); border-left-color: var(--cyan-dark); }
+    .callout-blue strong { color: var(--cyan-dark); }
+    .callout-green { background: var(--green-10); border-left-color: var(--green-dark); }
+    .callout-green strong { color: var(--green-dark); }
+
+    /* Inline grid for short fields */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    /* Footer */
+    footer {
+      padding: 24px 0;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      color: var(--secondary);
+      font-size: 13px;
+    }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 700px) {
+      h1 { font-size: 24px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .step-title { font-size: 20px; }
+      .panel { padding: 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#FAFAFA;border:1px solid #E5E5EA;border-radius:8px;color:#1C1C1E;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:14px;">← 回首頁</a>
+      <br>
+      <span class="eyebrow">AUTOLAB · 社會企業價值展示工具</span>
+      <h1>DV 價值展示生成器</h1>
+      <p class="lead">填表單 → 自動產生完整 Claude / Gemini 提示詞 → 貼到 AI 一鍵生成你的 DV 草稿。資料只存你瀏覽器，免註冊免上傳，永久免費。</p>
+    </div>
+  </header>
+
+  <!-- 進度條 -->
+  <div class="progress-bar">
+    <div class="wrap">
+      <div class="progress-inner" id="progressBar">
+        <div class="progress-step active" data-step="1"><span class="num">1</span>受眾選擇</div>
+        <div class="progress-step" data-step="2"><span class="num">2</span>溝通目的</div>
+        <div class="progress-step" data-step="3"><span class="num">3</span>12 引導問題</div>
+        <div class="progress-step" data-step="4"><span class="num">4</span>7 類資料盤點</div>
+        <div class="progress-step" data-step="5"><span class="num">5</span>產出 Prompt</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+
+    <!-- ========== Step 1: 受眾選擇 ========== -->
+    <section class="step-section active" data-step="1">
+      <div class="step-header">
+        <span class="step-eyebrow">Step 1 / 5</span>
+        <h2 class="step-title">這份 DV 要給誰看？</h2>
+        <p class="step-desc">先想清楚對象，才能決定語氣、內容深度與呈現方式。可複選，但建議聚焦 1-2 個主要受眾。</p>
+      </div>
+
+      <div class="callout callout-blue">
+        <strong>💡 第一次使用？</strong>先看示範案例就懂怎麼填了 →
+        <button class="btn btn-orange" style="margin-left:8px;padding:6px 14px;font-size:13px;" onclick="loadExample('cocoon')">📥 載入示範：繭裹子公平貿易</button>
+        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="https://docs.google.com/document/d/16hDd_0eoMWWbnqtxps_ytrSW8bTXaSkpOqSFJNhMjMk/edit?usp=sharing" target="_blank" rel="noopener">📄 看 Claude 跑出來的成果</a>
+        <br>
+        <strong style="margin-top:10px;display:inline-block;">🛠 切換工具：</strong>
+        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="sbmc.html">🎨 SBMC 畫布</a>
+        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="mermaid.html">📊 Mermaid 圖表</a>
+        <a class="btn btn-secondary" style="margin-left:6px;padding:6px 14px;font-size:13px;text-decoration:none;display:inline-block;" href="prompts.html">📚 10 個提示詞</a>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">主要受眾<span class="req">*</span></label>
+          <div class="field-hint">挑 1-3 個最重要的受眾。<span class="em">受眾不同，整份 DV 的語氣與重點會完全不同。</span></div>
+          <div class="options" data-multi="audience">
+            <label class="option-chip"><input type="checkbox" value="在地社區居民"> 🏘 在地社區居民</label>
+            <label class="option-chip"><input type="checkbox" value="服務對象（受惠者）"> 🤝 服務對象（受惠者）</label>
+            <label class="option-chip"><input type="checkbox" value="捐款人與群眾"> 💝 捐款人與群眾</label>
+            <label class="option-chip"><input type="checkbox" value="政府/補助單位"> 🏛 政府/補助單位</label>
+            <label class="option-chip"><input type="checkbox" value="企業 CSR/ESG 採購窗口"> 🏢 企業 CSR/ESG</label>
+            <label class="option-chip"><input type="checkbox" value="媒體與公眾"> 📰 媒體與公眾</label>
+            <label class="option-chip"><input type="checkbox" value="其他 NPO/合作夥伴"> 🔗 其他 NPO/合作夥伴</label>
+            <label class="option-chip"><input type="checkbox" value="董事會/理事會"> 👥 董事會/理事會</label>
+            <label class="option-chip"><input type="checkbox" value="學術機構/評鑑委員"> 🎓 學術機構/評鑑委員</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="audienceOther">補充說明（若有其他特定受眾）</label>
+          <input type="text" id="audienceOther" placeholder="例如：花蓮在地觀光客、原民部落長老、信義房屋全民社造評審">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="audienceCare">他們最在乎什麼？<span class="req">*</span></label>
+          <div class="field-hint">不同受眾在乎不同事。<span class="em">想想對方第一眼會問什麼問題？</span></div>
+          <textarea id="audienceCare" placeholder="例：捐款人在乎錢花在哪、看到具體改變；企業 CSR 在乎品牌曝光與 SDGs 對應；政府在乎 KPI 與政策對接"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="audienceFormat">他們習慣的接收形式<span class="req">*</span></label>
+          <div class="field-hint">格式選錯，內容再好也白搭。</div>
+          <select id="audienceFormat">
+            <option value="">請選擇</option>
+            <option value="一頁式 A4">一頁式 A4（給忙碌窗口）</option>
+            <option value="完整 PDF（10-20 頁）">完整 PDF 報告（10-20 頁，給政府/評審）</option>
+            <option value="簡報（30 頁簡報）">簡報（30 頁，給董事會/投資人）</option>
+            <option value="短影音（60 秒）">短影音腳本（60 秒，給社群）</option>
+            <option value="EDM/Email">EDM/Email 內文（給捐款人）</option>
+            <option value="網站一頁式 landing page">網站一頁式 landing page</option>
+            <option value="社群貼文（IG/FB）">社群貼文（IG/FB）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="resetAll()">🗑 清空全部</button>
+        <button class="btn btn-primary" onclick="goStep(2)">下一步 →</button>
+      </div>
+    </section>
+
+    <!-- ========== Step 2: 溝通目的 ========== -->
+    <section class="step-section" data-step="2">
+      <div class="step-header">
+        <span class="step-eyebrow">Step 2 / 5</span>
+        <h2 class="step-title">看完這份 DV 你希望對方做什麼？</h2>
+        <p class="step-desc">每份 DV 都不只是「讓人知道」，更是「想讓人做什麼」。明確設定行動目標，內容才會聚焦。</p>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">主要溝通目的<span class="req">*</span></label>
+          <div class="field-hint">可複選，但聚焦 1-2 個最重要的行動目標。</div>
+          <div class="options" data-multi="purpose">
+            <label class="option-chip"><input type="checkbox" value="爭取經費續撥/增加補助"> 💰 爭取經費續撥</label>
+            <label class="option-chip"><input type="checkbox" value="邀請捐款"> 💝 邀請捐款</label>
+            <label class="option-chip"><input type="checkbox" value="招募志工"> 🙋 招募志工</label>
+            <label class="option-chip"><input type="checkbox" value="取得企業合作"> 🤝 取得企業合作</label>
+            <label class="option-chip"><input type="checkbox" value="推動受眾參與/報名"> 📣 推動參與/報名</label>
+            <label class="option-chip"><input type="checkbox" value="倡議政策"> 📜 倡議政策</label>
+            <label class="option-chip"><input type="checkbox" value="增加品牌見度"> ⭐ 增加品牌見度</label>
+            <label class="option-chip"><input type="checkbox" value="申請獎項/認證"> 🏆 申請獎項/認證</label>
+            <label class="option-chip"><input type="checkbox" value="說服董事/理事"> 🧠 說服董事/理事</label>
+            <label class="option-chip"><input type="checkbox" value="媒體曝光"> 📰 媒體曝光</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="purposeAction">具體行動句（可選）</label>
+          <div class="field-hint">最理想的「呼籲行動」是什麼？例如：點擊捐款連結、填寫合作意向書、聯繫指定窗口</div>
+          <textarea id="purposeAction" placeholder="例如：希望讀者看完後掃 QR Code 填寫合作意向書，或撥打窗口電話 0912-345-678"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="successMetric">成功的長相（可選）</label>
+          <div class="field-hint">這份 DV 達到什麼樣的結果你會覺得「值了」？</div>
+          <textarea id="successMetric" placeholder="例：1 個月內收到 3 家企業合作意向、或募款達 50 萬、或政府專案通過"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goStep(1)">← 上一步</button>
+        <button class="btn btn-primary" onclick="goStep(3)">下一步 →</button>
+      </div>
+    </section>
+
+    <!-- ========== Step 3: 12 引導問題 ========== -->
+    <section class="step-section" data-step="3">
+      <div class="step-header">
+        <span class="step-eyebrow">Step 3 / 5</span>
+        <h2 class="step-title">DV 12 引導問題</h2>
+        <p class="step-desc">每題回答越具體，AI 產出越精準。如果不知道答案，可以先空著——但 AI 也只能用通用方式幫你寫。</p>
+      </div>
+
+      <div class="callout callout-blue">
+        <strong>💡 提示：</strong>受眾選擇（Q1）跟溝通目的（Q2）會自動帶入你前面的選擇，這裡只要補充具體細節即可。
+      </div>
+
+      <div class="panel">
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">1</span>受眾選擇（細節補充）</label>
+          <div class="field-hint">前面已選的主要受眾，這裡補充「對方的職位、角色、背景」會更精準。</div>
+          <textarea id="q1" placeholder="例：對方是國泰金控 ESG 部門副理，30+ 歲，每天看 50 份提案，最在乎能不能寫進公司永續報告書"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">2</span>重點溝通目的（細節補充）</label>
+          <div class="field-hint">這份 DV 的「終極目的」是什麼？讀者看完該採取什麼行動或產生什麼理解？</div>
+          <textarea id="q2" placeholder="例：希望對方願意贊助 100 萬主辦明年的『早療地板滾球聯誼賽』，並派 30 位員工當志工"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">3</span>核心訊息</label>
+          <div class="field-hint">一句話總結這份 DV 的核心訊息，讀者看完該記得什麼？</div>
+          <textarea id="q3" placeholder="例：『心路是台灣唯一年服 6000+ 心智障礙者的早療基金會，我們把您的捐款轉成具體的孩子能力提升』"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">4</span>關鍵成果與數字</label>
+          <div class="field-hint">用 3-5 個具體數字證明你的價值。<span class="em">服務人次、改變率、產出量、滿意度</span></div>
+          <textarea id="q4" placeholder="例：去年服務 6,243 位心智障礙者；早療滿意度 92%；5 間庇護工場創造 168 個就業機會；捐款人續捐率 78%"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">5</span>受惠者故事</label>
+          <div class="field-hint">挑 1-3 個真實故事讓數字有溫度。<span class="em">「前 → 中 → 後」對比最有力</span></div>
+          <textarea id="q5" class="large" placeholder="例：小明（化名）7 歲腦麻，3 年前進入心路早療中心時不會說話，現在能完整講出 3 字句、會主動跟人打招呼，今年第一次參加地板滾球聯誼賽自己投出球，媽媽當場哭了"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">6</span>組織能力與差異化</label>
+          <div class="field-hint">同類組織做什麼？我們「人家做不到」的是什麼？</div>
+          <textarea id="q6" placeholder="例：相對其他基金會，心路特色：① 服務全生涯（早療→就業→終養）② 自有 5 間庇護工場創造就業 ③ 與長榮航空合作的早療公益專案模式可複製"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">7</span>財務與資源</label>
+          <div class="field-hint">經費來源結構、人力配置、資源效率。</div>
+          <textarea id="q7" placeholder="例：年度預算 2.8 億；收入結構：政府委辦 35% / 企業捐款 30% / 個人捐款 25% / 自營收入 10%；500 名正職 + 1200 名志工"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">8</span>合作夥伴與信任背書</label>
+          <div class="field-hint">誰跟你合作？媒體報導？得獎紀錄？</div>
+          <textarea id="q8" placeholder="例：長期合作企業：長榮航空、7-11、富邦慈善；媒體報導：聯合報、商周專訪；得獎：2024 國家公益奬、Buying Power 採購獎"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">9</span>SDGs 對應</label>
+          <div class="field-hint">對應到聯合國 17 項永續發展目標的哪幾項？怎麼證明？</div>
+          <textarea id="q9" placeholder="例：SDG 4 優質教育（早療教案）、SDG 8 適當工作（庇護工場就業）、SDG 10 減少不平等（身障權益）、SDG 17 多方夥伴關係（企業合作模式）"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">10</span>未來計畫</label>
+          <div class="field-hint">下一步要做什麼？讓讀者看到成長空間。</div>
+          <textarea id="q10" placeholder="例：2026-2028 三年計畫：① 新北/高雄各增設 1 個早療中心 ② 庇護工場數位轉型導入 AI ③ 開發成人自立宿舍模式"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">11</span>呼籲行動 (CTA)</label>
+          <div class="field-hint">讀者看完應該做什麼？要具體：點什麼連結、聯絡誰、什麼時候</div>
+          <textarea id="q11" placeholder="例：『立即點擊連結捐款支持早療』『掃 QR Code 報名地板滾球志工』『聯絡企業合作窗口 02-xxx 王先生』"></textarea>
+        </div>
+
+        <div class="sub-q">
+          <label class="field-label"><span class="sub-q-num">12</span>視覺呈現方式</label>
+          <div class="field-hint">受眾接收形式已在 Step 1 選過，這裡補充：哪些段落適合用圖表強化？</div>
+          <textarea id="q12" placeholder="例：『財務結構』用圓餅圖、『服務體系』用流程圖、『3 年成長』用甘特圖、『SDGs 對應』用心智圖"></textarea>
+        </div>
+
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goStep(2)">← 上一步</button>
+        <button class="btn btn-primary" onclick="goStep(4)">下一步 →</button>
+      </div>
+    </section>
+
+    <!-- ========== Step 4: 7 類資料盤點 ========== -->
+    <section class="step-section" data-step="4">
+      <div class="step-header">
+        <span class="step-eyebrow">Step 4 / 5</span>
+        <h2 class="step-title">7 類資料盤點（A-G）</h2>
+        <p class="step-desc">填越完整、AI 產出越精準。空白的欄位 AI 會用通用方式帶過，不會編造。</p>
+      </div>
+
+      <div class="callout">
+        <strong>⚠️ 隱私提醒：</strong>請<strong>避免輸入服務對象的真實個資</strong>（身分證、住址、健保資料）。受惠者故事請用代稱與去識別化處理。
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">A. 組織基本資料</label>
+          <div class="field-hint">組織名稱、成立年份、使命願景、服務範圍、編制</div>
+          <textarea id="dataA" class="large" placeholder="組織名稱：xxx 基金會
+成立年份：1987 年
+使命：為心智障礙者全生涯（早療→就業→終養）服務
+服務範圍：全國，台北/桃園/新竹/高雄分會
+編制：500 名正職 + 1200 名志工"></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">B. 量化資料（最關鍵的彈藥）</label>
+          <div class="field-hint">服務人次、變化指標、財務數字、媒體曝光</div>
+          <textarea id="dataB" class="large" placeholder="服務人次：2024 累計 6,243 人
+變化指標：早療滿意度 92%、就業率提升 35%
+財務：年度預算 2.8 億，收入結構 政府 35% / 企業 30% / 個人 25% / 自營 10%
+媒體曝光：2024 報導 87 篇、FB 粉絲 12 萬"></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">C. 質性故事（讓數字有溫度）</label>
+          <div class="field-hint">3-5 個受惠者真實故事，含「前→中→後」對比。<strong>用代稱、去識別化</strong></div>
+          <textarea id="dataC" class="large" placeholder="故事 1：小明（化名，7 歲腦麻），3 年前不會說話 → 現在能講 3 字句、主動打招呼
+故事 2：阿芳（化名，45 歲輕度智能障礙），庇護工場工作 5 年 → 學會獨立通勤、月薪 2 萬
+故事 3：張媽媽（家屬），『以前不敢帶孩子出門』→『現在帶他去公園都會跟人介紹這是我兒子』"></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">D. 資源投入</label>
+          <div class="field-hint">經費來源（前 5 大）、人力配置、合作夥伴清單、場地設備</div>
+          <textarea id="dataD" class="large" placeholder="前 5 大金主：富邦慈善 800 萬、長榮航空 500 萬、政府委辦 9800 萬...
+人力：早療 120 人、就業 80 人、行政 50 人、其他...
+合作夥伴：長榮航空、7-11、富邦集團、北市政府社會局、台大醫院..."></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">E. 信任背書</label>
+          <div class="field-hint">獎項、認證、媒體報導（含連結）、重要人物</div>
+          <textarea id="dataE" class="large" placeholder="獎項：2024 國家公益獎、Buying Power 採購獎
+認證：經濟部社創選品（114 年）
+媒體：聯合報 2024/10 專題、商業周刊 2024/8 封面故事
+重要人物：董事長 xxx（退休大法官）、執行長 xxx（30 年社福經驗）"></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">F. 比較與差異化</label>
+          <div class="field-hint">同類組織做什麼？我們的獨特性？未來 1-3 年計畫</div>
+          <textarea id="dataF" class="large" placeholder="同類組織：伊甸、第一兒福、家扶各自的定位
+我們的獨特性：全台唯一服務心智障礙全生涯（從早療到終養）
+3 年計畫：新增 2 個早療中心、庇護工場 AI 轉型、自立宿舍模式"></textarea>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="field">
+          <label class="field-label">G. 受眾資料（已在 Step 1 大致填過，這裡補充細節）</label>
+          <div class="field-hint">受眾的職位、背景、會問什麼問題、忌諱什麼</div>
+          <textarea id="dataG" placeholder="例：對方公司過去 ESG 報告書聚焦環境議題，今年新增社會議題章節；採購流程要 3 個月；過去拒絕過你們的競品理由是『成效難量化』"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goStep(3)">← 上一步</button>
+        <button class="btn btn-primary" onclick="goStep(5)">產生 Prompt →</button>
+      </div>
+    </section>
+
+    <!-- ========== Step 5: 產出 Prompt ========== -->
+    <section class="step-section" data-step="5">
+      <div class="step-header">
+        <span class="step-eyebrow">Step 5 / 5</span>
+        <h2 class="step-title">你的 DV 生成 Prompt</h2>
+        <p class="step-desc">下面這段提示詞是依你的資料量身組合，採「角色 × 情境 × 期望」結構。一鍵複製後貼到 Claude / Gemini 即可。</p>
+      </div>
+
+      <div class="callout callout-green">
+        <strong>💡 推薦工具：</strong>
+        <a href="https://claude.ai/" target="_blank">Claude</a>（⭐ 推薦、長提示詞理解最好）｜
+        <a href="https://gemini.google.com/" target="_blank">Gemini</a>（免費、台灣可用）｜
+        <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>（免費）。這份 prompt 較長，<strong>用 Claude 效果最佳</strong>。
+      </div>
+
+      <div class="panel">
+        <label class="field-label">📋 完整 Prompt（一鍵複製）</label>
+        <div class="output-box" id="promptOutput">填完前面步驟後，這裡會自動產生你的 prompt...</div>
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="copyPrompt()">📋 複製 Prompt</button>
+          <button class="btn btn-orange" onclick="openClaude()">🚀 開啟 Claude</button>
+          <button class="btn btn-secondary" onclick="downloadPrompt()">💾 下載 .txt</button>
+          <button class="btn btn-ghost" onclick="goStep(4)">← 回去調整</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 style="color:var(--title);font-size:16px;font-weight:800;margin-bottom:10px;">📖 使用步驟</h3>
+        <ol style="padding-left:20px;color:var(--body);font-size:14.5px;line-height:1.9;">
+          <li>點「📋 複製 Prompt」</li>
+          <li>點「🚀 開啟 Claude」（或 Gemini / ChatGPT）</li>
+          <li>貼上 prompt，按 Enter</li>
+          <li>AI 會產出你的 DV 草稿（含一頁式摘要、詳細版、口頭版、視覺化建議、行動清單）</li>
+          <li>AI 給的 <strong>Mermaid 圖表代碼</strong> → 貼到 <a href="mermaid.html" target="_blank">📊 Mermaid 圖表生成器</a> 直接變成圖（可下載 SVG/PNG）</li>
+          <li>把草稿放進 Canva / FELO / Gamma 美化成最終簡報</li>
+          <li>不滿意？回上面任一步修改後重新產生 Prompt</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Autolab · AI峰哥 · <a href="https://www.autolab.cloud" target="_blank">autolab.cloud</a></span>
+      <span>免費永久使用 · 資料只存你瀏覽器</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===== State =====
+    const STORAGE_KEY = 'dv_generator_data_v1';
+    let currentStep = 1;
+
+    function saveState() {
+      const data = {
+        step: currentStep,
+        audience: getMultiValues('audience'),
+        audienceOther: document.getElementById('audienceOther').value,
+        audienceCare: document.getElementById('audienceCare').value,
+        audienceFormat: document.getElementById('audienceFormat').value,
+        purpose: getMultiValues('purpose'),
+        purposeAction: document.getElementById('purposeAction').value,
+        successMetric: document.getElementById('successMetric').value,
+        questions: {},
+        data: {},
+      };
+      for (let i = 1; i <= 12; i++) {
+        data.questions['q' + i] = document.getElementById('q' + i).value;
+      }
+      ['A','B','C','D','E','F','G'].forEach(letter => {
+        data.data['data' + letter] = document.getElementById('data' + letter).value;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        if (data.audience) setMultiValues('audience', data.audience);
+        if (data.audienceOther) document.getElementById('audienceOther').value = data.audienceOther;
+        if (data.audienceCare) document.getElementById('audienceCare').value = data.audienceCare;
+        if (data.audienceFormat) document.getElementById('audienceFormat').value = data.audienceFormat;
+        if (data.purpose) setMultiValues('purpose', data.purpose);
+        if (data.purposeAction) document.getElementById('purposeAction').value = data.purposeAction;
+        if (data.successMetric) document.getElementById('successMetric').value = data.successMetric;
+        if (data.questions) {
+          Object.keys(data.questions).forEach(k => {
+            if (document.getElementById(k)) document.getElementById(k).value = data.questions[k];
+          });
+        }
+        if (data.data) {
+          Object.keys(data.data).forEach(k => {
+            if (document.getElementById(k)) document.getElementById(k).value = data.data[k];
+          });
+        }
+      } catch(e) { console.warn('Load failed', e); }
+    }
+
+    function resetAll() {
+      if (!confirm('確定清空所有資料？此動作無法復原。')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+
+    // ===== Multi-choice chips =====
+    function getMultiValues(group) {
+      const container = document.querySelector(`[data-multi="${group}"]`);
+      if (!container) return [];
+      return Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
+    }
+    function setMultiValues(group, values) {
+      const container = document.querySelector(`[data-multi="${group}"]`);
+      if (!container) return;
+      container.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.checked = values.includes(el.value);
+        el.closest('.option-chip').classList.toggle('checked', el.checked);
+      });
+    }
+
+    document.querySelectorAll('.option-chip input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        e.target.closest('.option-chip').classList.toggle('checked', e.target.checked);
+        saveState();
+      });
+    });
+
+    // ===== Step Navigation =====
+    function goStep(n) {
+      currentStep = n;
+      document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+      document.querySelector(`.step-section[data-step="${n}"]`).classList.add('active');
+      document.querySelectorAll('.progress-step').forEach(s => {
+        const step = parseInt(s.dataset.step);
+        s.classList.remove('active', 'done');
+        if (step === n) s.classList.add('active');
+        else if (step < n) s.classList.add('done');
+      });
+      if (n === 5) generatePrompt();
+      saveState();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.progress-step').forEach(s => {
+      s.addEventListener('click', () => goStep(parseInt(s.dataset.step)));
+    });
+
+    // ===== Auto-save on input =====
+    document.querySelectorAll('input[type="text"], textarea, select').forEach(el => {
+      el.addEventListener('input', saveState);
+      el.addEventListener('change', saveState);
+    });
+
+    // ===== Prompt Generator =====
+    function generatePrompt() {
+      const aud = getMultiValues('audience');
+      const audOther = document.getElementById('audienceOther').value.trim();
+      const audCare = document.getElementById('audienceCare').value.trim();
+      const audFormat = document.getElementById('audienceFormat').value;
+      const purpose = getMultiValues('purpose');
+      const purposeAction = document.getElementById('purposeAction').value.trim();
+      const successMetric = document.getElementById('successMetric').value.trim();
+
+      const audienceStr = [aud.join('、'), audOther].filter(Boolean).join('；補充對象：') || '（未填）';
+      const purposeStr = purpose.join('、') || '（未填）';
+
+      function get(id) {
+        const v = (document.getElementById(id) || {}).value;
+        return v ? v.trim() : '（未填）';
+      }
+
+      const q = {};
+      for (let i = 1; i <= 12; i++) q[i] = get('q' + i);
+      const d = {};
+      ['A','B','C','D','E','F','G'].forEach(letter => d[letter] = get('data' + letter));
+
+      const prompt = `# 角色 (Role)
+你是一位資深「社會企業價值溝通顧問」，擁有 15+ 年協助 NPO/社創組織對外溝通的經驗，熟悉以下框架：
+- Demonstrating Value (DV) 工具手冊（加拿大原版 + 台灣勞動部中文版）
+- 聯合國 SDGs 17 項永續發展目標對應
+- 企業 CSR/ESG 採購邏輯
+- 捐款人心理與行為設計
+- 政府補助案撰寫要點
+
+# 情境 (Context)
+
+## 我的組織
+${d.A}
+
+## 我要產出一份「DV 價值展示」文件
+**主要受眾**：${audienceStr}
+**受眾在乎什麼**：${audCare || '（未填）'}
+**接收形式**：${audFormat || '（未指定）'}
+**主要溝通目的**：${purposeStr}
+**期望讀者採取的行動**：${purposeAction || '（未填）'}
+**成功的長相**：${successMetric || '（未指定）'}
+
+## 我手上的資料
+
+### B. 量化資料
+${d.B}
+
+### C. 質性故事
+${d.C}
+
+### D. 資源投入
+${d.D}
+
+### E. 信任背書
+${d.E}
+
+### F. 比較與差異化
+${d.F}
+
+### G. 受眾補充資料
+${d.G}
+
+## DV 12 引導問題我的思考
+
+1. 受眾細節：${q[1]}
+2. 溝通目的細節：${q[2]}
+3. 核心訊息：${q[3]}
+4. 關鍵成果與數字：${q[4]}
+5. 受惠者故事：${q[5]}
+6. 組織能力與差異化：${q[6]}
+7. 財務與資源：${q[7]}
+8. 合作夥伴與信任：${q[8]}
+9. SDGs 對應：${q[9]}
+10. 未來計畫：${q[10]}
+11. 呼籲行動：${q[11]}
+12. 視覺呈現建議：${q[12]}
+
+# 期望 (Expectation)
+
+請依照以下結構產出我的「DV 價值展示」文件，**5 個部分都要產出**：
+
+## Part 1：一頁式摘要（500 字內）
+- 給忙碌窗口看的版本
+- 包含：核心訊息（1 句）→ 3 個關鍵數字 → 1 個受惠者故事金句 → 1 句呼籲行動
+
+## Part 2：完整版（依接收形式調整篇幅）
+- 依「${audFormat || '完整 PDF'}」格式產出
+- 結構：背景 → 服務 → 成果 → 故事 → 差異化 → 未來 → 呼籲
+- 每段 2-3 個重點，配合具體數字與引述
+
+## Part 3：30 秒口頭版
+- 給講師/業務直接背的版本
+- 250 字內，含 1 個鉤子 + 1 個數字 + 1 句行動
+
+## Part 4：視覺化建議
+- 哪些段落適合用 Mermaid 流程圖？哪些用心智圖？哪些用圓餅圖？
+- 給出 3-5 個具體圖表建議與 Mermaid 程式碼草稿
+
+## Part 5：後續行動清單
+- 列出我要再補充/驗證的資料（標註 哪些「（未填）」是我該回去找的）
+- 建議下一步行動（誰可以審稿、什麼時候發出去、後續追蹤動作）
+
+## 寫作要求
+- **全程繁體中文台灣用語**
+- **禁用詞**：賦能、底層邏輯、顆粒度、範式、視頻、軟件、賦予能量
+- 不要堆疊形容詞（如「卓越」「優質」「精彩」），用具體數字與故事說話
+- 不要寫成悲情募款文，用「**成果 + 證據 + 行動**」結構
+- 對社福對象不貼悲情標籤，改用能力、成果、支持系統的角度
+- 如果某些資料我標註「（未填）」，請<strong>不要編造</strong>，改用「[此處待補：XXX]」標示
+- 引用受惠者故事時，請<strong>不要透露個資</strong>（使用代稱）
+
+請開始產出。如果需要我先補充任何資料才能寫得更精準，請先列出 3-5 個關鍵問題。`;
+
+      document.getElementById('promptOutput').textContent = prompt;
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('promptOutput').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Prompt 已複製到剪貼簿');
+      }).catch(() => {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ Prompt 已複製');
+      });
+    }
+
+    function openClaude() {
+      window.open('https://claude.ai/new', '_blank');
+    }
+
+    function downloadPrompt() {
+      const text = document.getElementById('promptOutput').textContent;
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `DV_prompt_${new Date().toISOString().slice(0,10)}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('✓ 已下載 .txt');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // ===== Example: 繭裹子 =====
+    const COCOON_EXAMPLE = {
+      audience: ['企業 CSR/ESG 採購窗口', '媒體與公眾'],
+      audienceOther: '鎖定上市櫃公司永續部副理級、年資 3-7 年的窗口；兼顧獨立媒體 ESG 線記者',
+      audienceCare: '企業 CSR 副理在乎：① 採購故事能否寫進公司永續報告書 ② SDGs 對應是否具體 ③ 商品品質與交期穩定 ④ WFTO/B Corp 認證文件能否快速取得 ⑤ 員工拿到禮品後的「故事感」能否傳達',
+      audienceFormat: '完整 PDF（10-20 頁）',
+      purpose: ['取得企業合作', '增加品牌見度'],
+      purposeAction: '希望企業 ESG 窗口主動聯繫繭裹子業務團隊，啟動「年度員工禮品/客戶贈品」採購評估，目標 6 個月內完成首批採購（30 萬以上）。',
+      successMetric: '3 個月內收到 5 家上市櫃公司合作意向、其中 2 家進入採購流程、1 家完成首批 50 萬元採購並寫進當年永續報告書',
+      questions: {
+        q1: '主要對象：上市櫃公司永續部副理（年資 3-7 年、30-40 歲）；常需在 1 個月內完成「值得寫進永續報告書」的採購；過去多採購印刷品、咖啡、有機米當禮品，今年被總經理要求「升級到有國際認證的社企商品」。',
+        q2: '希望對方願意把繭裹子納入「年度員工生日禮 / 客戶答謝禮 / 公司年禮」採購名單；首批起訂量 100-300 個（NT$30-50 萬）；長期目標成為該公司「永續禮品供應商」之一。',
+        q3: '繭裹子是台灣第一個取得 WFTO + B Corp 雙認證的公平貿易品牌，2010 年至今連結 25 個國家、50+ 生產組織，把您的禮品預算直接轉成第三世界婦女的穩定收入。',
+        q4: '① 2010 立案至今 16 年，台灣第一個 WFTO 認證品牌\n② 連結 25 國、50+ 生產組織，背後是 1000+ 弱勢婦女工藝者\n③ B Corp 認證、1% for the Planet 會員、Fairtrade Cotton 認證\n④ 全台 4 家實體門市 + 官網 + Pinkoi\n⑤ 10+ 家上市企業合作經驗（含金融、科技、零售業）',
+        q5: '故事 1：尼泊爾 Mahaguthi 工坊的 Sita（化名，48 歲），原本在加德滿都郊區做日薪工人，加入工坊 8 年後每月穩定收入 1.2 萬盧比（約 NT$2,800），讓兩個女兒讀完高中。\n故事 2：印度 Rajasthan 的針織小組（25 人），透過繭裹子的長期下單，從季節性收入轉為「年訂單量穩定」的合作關係，工坊女性平均月收入提升 60%。\n故事 3：某上市金融業 ESG 副理：「我們把繭裹子寫進去年永續報告書，金管會評鑑得到 A++ 永續評等，董事長親自提及這個案例。」',
+        q6: '同類品牌（光原社企、芙彤園、卓溪鄉合作社）大多聚焦「台灣本地原民」；繭裹子的獨特性：\n① 國際層級：跨 25 國公平貿易網絡，能對應跨國企業客戶\n② 雙認證背書（WFTO + B Corp），文件可直接附在採購單\n③ 設計力強，能對應「品牌升級需求」的企業\n④ 16 年穩定營運，供應鏈成熟，能接 100-1000 個的中大量訂單',
+        q7: '年營收：5000 萬-1 億區間（估）；公平貿易採購占比 100%\n收入結構：B2C 零售 60% / B2B 企業團購 25% / 通路批發 15%\n編制：台灣團隊約 20-30 人（設計、業務、品牌、門市）+ 海外 50+ 生產組織',
+        q8: '認證：WFTO 世界公平貿易組織（2010 起，台灣第一）、B Corp 認證、1% for the Planet 會員、Fairtrade Cotton\n媒體：社企流多次專題、商業周刊、天下永續報導\n通路：誠品、Pinkoi、各百貨設櫃\n入選：經濟部社會創新平台登錄廠商、Buying Power 採購名單',
+        q9: 'SDG 1 消除貧窮（弱勢婦女穩定收入）\nSDG 5 性別平等（女性工藝者經濟自立）\nSDG 8 適當工作與經濟成長（公平貿易薪資與工作條件）\nSDG 10 減少不平等（連結開發中國家生產者）\nSDG 12 負責任的消費與生產（永續供應鏈）\nSDG 17 多方夥伴關係（25 國 50+ NGO 網絡）',
+        q10: '2026-2028 三年計畫：\n① B2B 企業團購從 25% 拉到 40%\n② 開發「企業 ESG 客製專案」服務（含商品 + 員工故事溝通 + 報告書素材包）\n③ 與更多東南亞、非洲生產者合作（從 25 國拓展到 30 國）\n④ 推出「公平貿易教育」課程給企業內訓使用',
+        q11: '請掃描下方 QR Code 預約 30 分鐘線上提案會議，我們將依貴公司需求量、預算、永續策略，提供客製化禮品方案。或撥打企業合作專線：02-xxxx-xxxx 找 Liz 共同創辦人。',
+        q12: '「合作網絡圖」用心智圖（25 國 + 50 組織）\n「年度成長」用甘特圖（從 2010 到現在的里程碑）\n「收入結構」用圓餅圖（B2C/B2B/通路占比）\n「SDGs 對應」用視覺化對應表\n「企業客戶禮品案例」用 before/after 對比圖',
+      },
+      data: {
+        dataA: '組織名稱：繭裹子 Twine\n成立年份：2010\n創辦人：Vinka & Liz\n使命：「希望不再為世界帶來破壞」——透過台灣設計 × 公平貿易 × 國際工藝傳承，讓買賣關係成為改變世界的力量\n服務範圍：全球 25 國 50+ 生產組織；台灣端設計、品牌、銷售\n編制：台灣團隊 20-30 人 + 海外 50+ 合作工坊',
+        dataB: '累計支持 1000+ 名第三世界弱勢婦女\n合作工坊女性平均收入提升 60%（部分工坊數據）\n年營收：5000 萬-1 億區間；公平貿易採購占比 100%\n媒體曝光：社企流、商周、天下、CSRone 多次深度報導；FB 12 萬粉絲\n認證：WFTO（2010）+ B Corp（2017）+ 1% for the Planet（2017）+ Fairtrade Cotton',
+        dataC: '故事 1：尼泊爾 Sita（化名，48 歲）—— 從日薪工人到月收入穩定，女兒讀完高中\n故事 2：印度 Rajasthan 針織小組（25 名女性）—— 從季節性收入到全年穩定下單\n故事 3：上市金融業 ESG 副理回饋 —— 繭裹子寫進永續報告書、董事長親自提及\n故事 4：B Corp 入選過程 —— 從財務揭露、員工照顧到供應鏈透明，3 年通過認證的歷程',
+        dataD: '經費結構：自有銷售（B2C/B2B/通路）為主，部分公益專案接受贊助\n人力：設計 8 / 業務 5 / 品牌行銷 5 / 門市運營 10（估）\n合作夥伴：Mahaguthi（尼泊爾）、Sasha（印度）、Bangladesh 多個 NGO 等\n場地：台北 + 台中實體門市 4 家',
+        dataE: '認證：WFTO、B Corp、1% for the Planet、Fairtrade Cotton（四大國際認證）\n媒體：社企流深度專題、商業周刊封面、天下永續、CSRone\n通路：Pinkoi 長期合作、誠品駐點\n入選：經濟部社會創新平台、Buying Power 採購名單\n重要人物：Vinka & Liz 共同創辦人，台灣公平貿易教母級人物',
+        dataF: '同類品牌：光原社企（台灣原民）、芙彤園（弱勢家庭）、卓溪鄉合作社、印度 Khadi 純棉品牌\n獨特性：① 國際版圖（25 國）② 雙認證（WFTO + B Corp）③ 設計力強 ④ 16 年穩定供應鏈\n3 年計畫：B2B 從 25%→40%、推 ESG 客製專案、東南亞拓點',
+        dataG: '對方公司：永續部 3-5 年資歷（30-40 歲副理級）\n在乎：寫進永續報告書、SDGs 對應具體、商品品質、認證文件\n接收形式：完整 PDF 報告（10-20 頁）+ 1 頁式摘要供轉發老闆\n過去採購歷史：印刷品、有機米、咖啡為主；今年首次想升級到「有國際認證的社企商品」\n採購流程：3 個月（資格審→提案→董事會核可→下單）\n採購週期：每年 Q1（年禮）+ Q4（客戶答禮）\n過去拒絕過誰：曾拒絕純台灣本地原民品牌，理由是「故事感不夠國際化」\n切入時機：建議在 Q3（10-11 月）對接，準備明年 Q1 採購',
+      },
+    };
+
+    function loadExample(name) {
+      const map = { cocoon: COCOON_EXAMPLE };
+      const ex = map[name];
+      if (!ex) return;
+      if (!confirm('載入示範案例會覆蓋目前所有欄位內容，確定要繼續嗎？')) return;
+      setMultiValues('audience', ex.audience);
+      document.getElementById('audienceOther').value = ex.audienceOther;
+      document.getElementById('audienceCare').value = ex.audienceCare;
+      document.getElementById('audienceFormat').value = ex.audienceFormat;
+      setMultiValues('purpose', ex.purpose);
+      document.getElementById('purposeAction').value = ex.purposeAction;
+      document.getElementById('successMetric').value = ex.successMetric;
+      Object.keys(ex.questions).forEach(k => {
+        if (document.getElementById(k)) document.getElementById(k).value = ex.questions[k];
+      });
+      Object.keys(ex.data).forEach(k => {
+        if (document.getElementById(k)) document.getElementById(k).value = ex.data[k];
+      });
+      saveState();
+      goStep(5);
+      showToast('✓ 已載入繭裹子範例，跳到 Step 5 看 Prompt');
+    }
+
+    // ===== Init =====
+    loadState();
+  </script>
+
+</body>
+</html>
